@@ -1,0 +1,35 @@
+{
+	"New Component": {
+		"body": [
+			"/*******************************************************************************",
+			" *",
+			" * ${1:ComponentName}",
+			" *",
+			" ******************************************************************************/",
+			"",
+			"/**",
+			" * Props for ${1:ComponentName}",
+			" */",
+			"interface ${1:ComponentName}Props {",
+			"",
+			"}",
+			"",
+			"/**",
+			" * Style for ${1:ComponentName}",
+			" */",
+			"const Styled${1:ComponentName} = styled.div`",
+			"",
+			"`",
+			"",
+			"/**",
+			" * ${1:ComponentName} Component",
+			" */",
+			"const ${1:ComponentName} = ( props: ${1:ComponentName}Props ) => {",
+			"${0}",
+			"}"
+		],
+		"description": "Create a new component with props and style.",
+		"prefix": "newcomp",
+		"scope": "typescriptreact"
+	}
+}
