@@ -41,6 +41,7 @@ export const SubHeader: React.FC<SubHeaderProps> = ( props ) => {
         <Box
             align="center"
             flex
+            overflow="auto"
             {...props.addlProps}
         >
             {props.children}

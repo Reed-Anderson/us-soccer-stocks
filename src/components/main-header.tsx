@@ -24,7 +24,7 @@ const MainHeader = () => {
 
     return (
         <Header background={COLORS.brand} gap="none" pad="xsmall">
-            <Button icon={<Home />} hoverIndicator />
+            <Button icon={<Home />} hoverIndicator href="/" />
             <GrowDiv />
             <Menu label="Account" items={accountItems} />
             <Button icon={<MenuIcon />} hoverIndicator />
