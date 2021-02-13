@@ -19,24 +19,14 @@ import { Link, useHistory } from 'react-router-dom'
 
 /*******************************************************************************
  *
- * Regular Expressions
- *
- ******************************************************************************/
-
-const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!$%^@#£€*?&]{8,}$/
-const displayNameRegex = /^[a-zA-Z0-9 _-]{3,16}$/
-
-/*******************************************************************************
- *
- * RegisterView
+ * LoginView
  *
  ******************************************************************************/
 
 /**
- * RegisterView Component
+ * LoginView Component
  */
-const RegisterView = () => {
+const LoginView = () => {
     const size = React.useContext( ResponsiveContext )
     return (
         <>
@@ -53,10 +43,10 @@ const RegisterView = () => {
                 >
                     <CardHeader justify="center">
                         <Text size="large" weight="bold">
-                            Register
+                            Log In
                         </Text>
                     </CardHeader>
-                    <RegisterForm />
+                    <LoginForm />
                 </Card>
             </SubHeader>
         </>
@@ -65,25 +55,21 @@ const RegisterView = () => {
 
 /*******************************************************************************
  *
- * RegisterForm
+ * LoginForm
  *
  ******************************************************************************/
 
-
 /**
- * RegisterForm Component
+ * LoginForm Component
  */
-const RegisterForm = () => {
+const LoginForm = () => {
     /* History to redirect */
     const history = useHistory()
 
     /* State for the values inside the form */
     const [ formState, setFormState ] = React.useState( {
         Email: '',
-        DisplayName: '',
-        MobileNumber: '',
-        Password: '',
-        ConfirmPassword: ''
+        Password: ''
     } )
 
     /* State for an error message, if any */
@@ -92,28 +78,19 @@ const RegisterForm = () => {
     /* Function for form submit */
     const onSubmit = async () => {
         try {
-            const userCred = await firebase
-                .auth()
-                .createUserWithEmailAndPassword(
-                    formState.Email,
-                    formState.Password
-                )
-            userCred.user.updateProfile( { 
-                displayName: formState.DisplayName
-            } )
-
+            await firebase.auth().signInWithEmailAndPassword(
+                formState.Email,
+                formState.Password
+            )
             history.push( '/' )
         } catch ( e: any ) {
-            setErrorMessage( e.message || 'Something went wrong!' )
+            if( e.code === "auth/user-not-found" ) {
+                setErrorMessage( "Invalid username/password" )
+            }
+            else {
+                setErrorMessage( e.message || 'Something went wrong!' )
+            }
         }
-    }
-
-    /* Validate Confirm Password */
-    const validateConfirmPassword = ( confirmPassword: string ) => {
-        if ( confirmPassword !== formState.Password ) {
-            return 'Passwords do not match.'
-        }
-        return true
     }
 
     return (
@@ -134,25 +111,6 @@ const RegisterForm = () => {
                     label="Email Address"
                     margin="small"
                     required
-                    validate={{
-                        regexp: emailRegex,
-                        message: 'Invalid Email'
-                    }}
-                />
-                <FormField
-                    name="DisplayName"
-                    label="Display Name"
-                    margin="small"
-                    required
-                    validate={{
-                        regexp: displayNameRegex,
-                        message: 'Invalid Display Name'
-                    }}
-                />
-                <FormField
-                    name="MobileNumber"
-                    label="Mobile Number (Optional)"
-                    margin="small"
                 />
                 <FormField
                     name="Password"
@@ -160,19 +118,6 @@ const RegisterForm = () => {
                     margin="small"
                     required
                     type="password"
-                    validate={{
-                        regexp: passwordRegex,
-                        message: 'Password requires a minimum of 8 characters.'
-                    }}
-                />
-                <FormField
-                    data-lpignore="true"
-                    label="Confirm Password"
-                    margin="small"
-                    name="ConfirmPassword"
-                    required
-                    type="password"
-                    validate={validateConfirmPassword}
                 />
                 {errorMessage && (
                     <Box
@@ -190,11 +135,11 @@ const RegisterForm = () => {
                 )}
                 <CardFooter justify="center">
                     <Box direction="row" gap="small">
-                        <Link to="/login">
-                            <Button label="Log In" />
+                        <Link to="/register">
+                            <Button label="Register" />
                         </Link>
                         <Button
-                            label="Register"
+                            label="Log In"
                             primary
                             type="submit"
                         />
@@ -205,4 +150,4 @@ const RegisterForm = () => {
     )
 }
 
-export default RegisterView
+export default LoginView
