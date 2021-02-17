@@ -2,13 +2,13 @@ import * as React from "react"
 import { Button, Header, Menu } from "grommet"
 import { COLORS } from "../misc/colors"
 import {
-    BarChart,
     Home,
     Login,
     Logout,
+    Optimize,
     PieChart,
     User,
-    UserNew
+    UserAdd
 } from "grommet-icons"
 import { GrowDiv } from "./simple-divs"
 import { UserContext } from "../misc/user-provider"
@@ -48,7 +48,7 @@ const MainHeader = () => {
         },
         {
             gap: "small",
-            icon: <BarChart />,
+            icon: <Optimize />,
             label: 'Players'
         },
         {
@@ -61,7 +61,7 @@ const MainHeader = () => {
         /* Items to be shown when the user is not logged in */
         {
             gap: "small",
-            icon: <UserNew />,
+            icon: <UserAdd />,
             label: 'Register',
             onClick: () => history.push( "/register" )
         },
