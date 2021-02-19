@@ -49,7 +49,8 @@ const MainHeader = () => {
         {
             gap: "small",
             icon: <Optimize />,
-            label: 'Players'
+            label: 'Players',
+            onClick: () => history.push( "/players" )
         },
         {
             gap: "small",
@@ -81,7 +82,14 @@ const MainHeader = () => {
             pad="xsmall"
         >
             <Link to="/">
-                <Button icon={<Home />} hoverIndicator />
+                <Button
+                    color={COLORS.white}
+                    icon={<Home />}
+                    hoverIndicator
+                    label="USMNT Stocks"
+                    plain
+                    style={{ padding: 10 }}
+                />
             </Link>
             <GrowDiv />
             <Menu

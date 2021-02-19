@@ -1,12 +1,12 @@
 import * as React from "react"
-import { Grommet } from "grommet"
+import { Grommet, ThemeType } from "grommet"
 import { COLORS } from "../misc/colors"
 import { BrowserRouter } from 'react-router-dom'
 import ViewSwitch from "./view-switch"
 import { UserContextProvider } from "../misc/user-provider"
 
 /* Global Grommet theme */
-const theme = {
+const theme: ThemeType = {
     global: {
         colors: COLORS,
         font: {
@@ -21,6 +21,22 @@ const theme = {
     button: {
         border: {
             radius: '12px'
+        }
+    },
+    tab: {
+        active: {
+            color: COLORS["neutral-3"]
+        },
+        border: {
+            color: COLORS["dark-6"],
+            hover: {
+                color: COLORS["dark-2"]
+            }
+        },
+        color: COLORS["dark-6"],
+        extend: "text-transform: capitalize",
+        hover: {
+            color: COLORS["dark-2"]
         }
     }
 }
