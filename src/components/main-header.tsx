@@ -7,8 +7,8 @@ import {
     Logout,
     Optimize,
     PieChart,
-    User,
-    UserAdd
+    UserAdd,
+    UserManager
 } from "grommet-icons"
 import { GrowDiv } from "./simple-divs"
 import { UserContext } from "../misc/user-provider"
@@ -38,7 +38,7 @@ const MainHeader = () => {
         /* Items to be shown when the user is logged in */
         {
             gap: "small",
-            icon: <User />,
+            icon: <UserManager />,
             label: 'Profile'
         },
         {

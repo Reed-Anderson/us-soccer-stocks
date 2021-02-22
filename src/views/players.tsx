@@ -1,3 +1,4 @@
+
 import * as React from 'react'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
@@ -7,7 +8,6 @@ import { GrowDiv, SubHeader } from '../components/simple-divs'
 import {
     Box,
     Button,
-    Menu,
     ResponsiveContext,
     Tab,
     Tabs,
@@ -17,7 +17,7 @@ import {
 } from 'grommet'
 import { COLORS } from '../misc/colors'
 import { Link } from 'react-router-dom'
-import { Currency, PieChart, Search } from 'grommet-icons'
+import { Currency, PieChart, Search, User } from 'grommet-icons'
 
 /*******************************************************************************
  *
@@ -175,9 +175,10 @@ const PlayerRow = ( props: PlayerRowProps ) => {
                 <Button
                     color={COLORS['dark-1']}
                     hoverIndicator
+                    icon={<User />}
                     label={props.player.displayName}
                     plain
-                    style={{ padding: 5 }}
+                    style={{ padding: 8 }}
                 />
             </Link>
             {props.owned && (
@@ -207,7 +208,6 @@ const PlayerRow = ( props: PlayerRowProps ) => {
             <Currency
                 style={{ padding: '0 10px' }}
             />
-            <Menu items={[]} />
         </Box>
     )
 }
