@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 import MainHeader from '../components/main-header'
 import { SubHeader } from '../components/simple-divs'
 import { COLORS } from '../misc/colors'
+
 /*******************************************************************************
  *
  * ErrorView

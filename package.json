@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production --config webpack.prod.ts",
-    "dev": "webpack-dev-server --open --config webpack.dev.ts",
+    "functions": "cd functions && npm run shell && cd ..",
+    "start": "webpack-dev-server --open --config webpack.dev.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Reed Anderson",

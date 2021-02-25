@@ -18,6 +18,10 @@ import {
 import { COLORS } from '../misc/colors'
 import { Link } from 'react-router-dom'
 import { Currency, PieChart, Search, User } from 'grommet-icons'
+import {
+    PostTransactionLog,
+    PostTransactionLogPlayer
+} from '../../functions/src/data/types'
 
 /*******************************************************************************
  *
@@ -58,8 +62,9 @@ const PlayersView = () => {
         const doc = firebase.app().firestore().doc( "postTransactionLogs/1" )
         doc.onSnapshot( snapshot => {
             const positionSet: Set<string> = new Set()
-            const newPlayers: any[] = []
-            snapshot.data().players.forEach( ( player: any ) => {
+            const newPlayers: PostTransactionLogPlayer[] = []
+            const data = snapshot.data() as PostTransactionLog
+            data.players.forEach( player => {
                 newPlayers.push( player )
                 positionSet.add( player[ 'position' ] )
             } )
@@ -110,7 +115,7 @@ const PlayersView = () => {
  * Props for PlayerBox
  */
 interface PlayerBoxProps {
-    players: any[]
+    players: PostTransactionLogPlayer[]
 }
 
 /**
@@ -155,7 +160,7 @@ const PlayerBox = ( props: PlayerBoxProps ) => {
 interface PlayerRowProps {
     oddIndex: boolean
     owned: boolean
-    player: any
+    player: PostTransactionLogPlayer
 }
 
 /**
