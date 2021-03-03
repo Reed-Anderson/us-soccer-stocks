@@ -1,6 +1,5 @@
 
 import * as React from 'react'
-import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 import MainHeader from '../components/main-header'
@@ -22,6 +21,7 @@ import {
     PostTransactionLog,
     PostTransactionLogPlayer
 } from '../../functions/src/data/types'
+import { useDocumentData } from '../misc/firebase-hooks'
 
 /*******************************************************************************
  *
@@ -33,6 +33,12 @@ import {
  * PlayersView Component
  */
 const PlayersView = () => {
+
+    /* State to get the latest daily PostTransationLog */
+    const [
+        dailyLog
+    ] = useDocumentData<PostTransactionLog>( "postTransactionLogs/1" )
+
     /* State to hold the actively selected position */
     const [ positionIndex, setPositionIndex ] = React.useState( 0 )
 
@@ -57,21 +63,22 @@ const PlayersView = () => {
     }, [ players, positionIndex, playerQuery ] )
 
     /* Effect to populate players when component mounts */
-    /* TODO: Elevate this state */
     React.useEffect( () => {
-        const doc = firebase.app().firestore().doc( "postTransactionLogs/1" )
-        doc.onSnapshot( snapshot => {
+        if( !dailyLog ) {
+            setPositions( [] )
+            setPlayers( [] )
+        }
+        else {
             const positionSet: Set<string> = new Set()
             const newPlayers: PostTransactionLogPlayer[] = []
-            const data = snapshot.data() as PostTransactionLog
-            data.players.forEach( player => {
+            dailyLog.players.forEach( player => {
                 newPlayers.push( player )
                 positionSet.add( player[ 'position' ] )
             } )
             setPositions( Array.from( positionSet ).sort() )
             setPlayers( newPlayers )
-        } )
-    }, [] )
+        }
+    }, [ dailyLog ] )
 
     return (
         <>

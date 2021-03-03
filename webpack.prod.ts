@@ -1,27 +1,24 @@
-
-import * as path from "path"
-import * as webpack from "webpack"
 import * as HtmlWebPackPlugin from "html-webpack-plugin"
 
 const htmlPlugin = new HtmlWebPackPlugin( {
-  template: "./src/launch/index.html",
-  filename: "./index.html"
+  template: "./src/launch/index.html"
 } )
 
-const config: webpack.Configuration = {
-  mode: "production",
+
+const config = {
+  mode: "development",
   entry: "./src/launch/index.tsx",
-  output: {
-    path: path.resolve( __dirname, "dist" ),
-    filename: "bundle.js"
-  },
   resolve: {
+    // Add '.ts' and '.tsx' as resolvable extensions.
     extensions: [ ".ts", ".tsx", ".js", ".json" ]
+  },
+  devServer: {
+    historyApiFallback: true
   },
 
   module: {
     rules: [
-      { test: /\.tsx?$/, loader: "awesome-typescript-loader" }
+      { test: /\.tsx?$/, loader: "ts-loader" }
     ]
   },
   plugins: [ htmlPlugin ]
