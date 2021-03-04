@@ -14,17 +14,20 @@ export function useDocumentData<Type>( path: string ):
         null as firebase.firestore.FirestoreError
     )
 
-    const doc = firebase.app().firestore().doc( path )
-    doc.onSnapshot(
-        snapshot => {
-            setLoading( false )
-            setValue( snapshot.data() as Type )
-        },
-        error => {
-            setLoading( false )
-            setError( error )
-        }
-    )
+    /* Effect so the listener is only set once */
+    React.useEffect( () => {
+        const doc = firebase.app().firestore().doc( path )
+        doc.onSnapshot(
+            snapshot => {
+                setLoading( false )
+                setValue( snapshot.data() as Type )
+            },
+            error => {
+                setLoading( false )
+                setError( error )
+            }
+        )
+    }, [] )
 
     return [ value, loading, error ]
 }

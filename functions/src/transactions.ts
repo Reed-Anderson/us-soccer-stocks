@@ -1,6 +1,6 @@
 import { app } from "firebase-admin"
 import * as functions from "firebase-functions"
-import { PostTransactionLogPlayer, PostTransactionLog } from "./data/types"
+import { PtlPlayer, PostTransactionLog } from "./data/types"
 import { getCollection } from "./utils"
 
 /**
@@ -8,7 +8,7 @@ import { getCollection } from "./utils"
  */
 export const initPostTransactionLog = functions.https.onRequest(
     async ( req, res ) => {
-        const postTransLogPlayers: PostTransactionLogPlayer[] = []
+        const postTransLogPlayers: PtlPlayer[] = []
 
         const players = await getCollection( `players` )
         players.forEach( playerDoc => {

@@ -19,9 +19,12 @@ import { Link } from 'react-router-dom'
 import { Currency, PieChart, Search, User } from 'grommet-icons'
 import {
     PostTransactionLog,
-    PostTransactionLogPlayer
+    PtlPlayer,
+    ptlGetPositionsAndPlayers
 } from '../../functions/src/data/types'
 import { useDocumentData } from '../misc/firebase-hooks'
+import FullPageLoader from '../components/full-page-loader'
+import useStillMounted from '../misc/use-still-mounted'
 
 /*******************************************************************************
  *
@@ -34,9 +37,13 @@ import { useDocumentData } from '../misc/firebase-hooks'
  */
 const PlayersView = () => {
 
+    /* StillMounted hook required to set state after async features */
+    const stillMounted = useStillMounted()
+
     /* State to get the latest daily PostTransationLog */
     const [
-        dailyLog
+        ptl,
+        ptlLoading
     ] = useDocumentData<PostTransactionLog>( "postTransactionLogs/1" )
 
     /* State to hold the actively selected position */
@@ -64,49 +71,57 @@ const PlayersView = () => {
 
     /* Effect to populate players when component mounts */
     React.useEffect( () => {
-        if( !dailyLog ) {
-            setPositions( [] )
-            setPlayers( [] )
+        console.log( stillMounted.current )
+        if( stillMounted.current ) {
+            if( !ptl ) {
+                setPositions( [] )
+                setPlayers( [] )
+            }
+            else {
+                const [ pos, players ] =  ptlGetPositionsAndPlayers( ptl )
+                setPositions( pos )
+                setPlayers( players )
+            }
         }
-        else {
-            const positionSet: Set<string> = new Set()
-            const newPlayers: PostTransactionLogPlayer[] = []
-            dailyLog.players.forEach( player => {
-                newPlayers.push( player )
-                positionSet.add( player[ 'position' ] )
-            } )
-            setPositions( Array.from( positionSet ).sort() )
-            setPlayers( newPlayers )
-        }
-    }, [ dailyLog ] )
+    }, [ ptl ] )
 
     return (
         <>
             <MainHeader />
             <SubHeader>
-                <Tabs
-                    activeIndex={positionIndex}
-                    margin="medium"
-                    onActive={setPositionIndex}
-                >
-                    {positions.map( position => (
-                        <Tab
-                            key={`tab_${position}`}
-                            style={{ textTransform: 'capitalize' }}
-                            title={position}
-                        />
-                    ) )}
-                </Tabs>
-                <Box flex={false} margin={{ bottom: "small" }} width="large">
-                    <TextInput
-                        icon={<Search />}
-                        onChange={e => setPlayerQuery( e.target.value )}
-                        placeholder="Search Player..."
-                        size="small"
-                        value={playerQuery}
-                    />
-                </Box>
-                <PlayerBox players={filteredPlayers} />
+                {ptlLoading ? (
+                    <FullPageLoader />
+                ) : (
+                    <>
+                        <Tabs
+                            activeIndex={positionIndex}
+                            margin="medium"
+                            onActive={setPositionIndex}
+                        >
+                            {positions.map( position => (
+                                <Tab
+                                    key={`tab_${position}`}
+                                    style={{ textTransform: 'capitalize' }}
+                                    title={position}
+                                />
+                            ) )}
+                        </Tabs>
+                        <Box
+                            flex={false}
+                            margin={{ bottom: "small" }}
+                            width="large"
+                        >
+                            <TextInput
+                                icon={<Search />}
+                                onChange={e => setPlayerQuery( e.target.value )}
+                                placeholder="Search Player..."
+                                size="small"
+                                value={playerQuery}
+                            />
+                        </Box>
+                        <PlayerBox players={filteredPlayers} />
+                    </>
+                )}
             </SubHeader>
         </>
     )
@@ -122,7 +137,7 @@ const PlayersView = () => {
  * Props for PlayerBox
  */
 interface PlayerBoxProps {
-    players: PostTransactionLogPlayer[]
+    players: PtlPlayer[]
 }
 
 /**
@@ -167,7 +182,7 @@ const PlayerBox = ( props: PlayerBoxProps ) => {
 interface PlayerRowProps {
     oddIndex: boolean
     owned: boolean
-    player: PostTransactionLogPlayer
+    player: PtlPlayer
 }
 
 /**
