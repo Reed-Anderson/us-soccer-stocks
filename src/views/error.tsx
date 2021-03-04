@@ -21,7 +21,7 @@ const ErrorView = () => {
             <MainHeader />
             <SubHeader addlProps={{ margin: 'xlarge' }}>
                 <Card
-                    background={COLORS['light-5']}
+                    background={COLORS['light-3']}
                     elevation="none"
                     gap="small"
                     pad="medium"
