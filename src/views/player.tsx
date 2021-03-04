@@ -1,7 +1,12 @@
+import { Heading } from 'grommet'
 import * as React from 'react'
 import { useParams } from 'react-router-dom'
+import { Player } from '../../functions/src/data/types'
+import FullPageLoader from '../components/full-page-loader'
 import MainHeader from '../components/main-header'
+import PositionCard from '../components/position-card'
 import { SubHeader } from '../components/simple-divs'
+import { useDocumentData } from '../misc/firebase-hooks'
 
 /*******************************************************************************
  *
@@ -21,13 +26,24 @@ interface PlayerViewParams {
  */
 const PlayerView = () => {
     const params = useParams<PlayerViewParams>()
+    const [
+        player,
+        playerLoading
+    ] = useDocumentData<Player>( `players/${params.playerId}` )
 
     return (
         <>
             <MainHeader />
-            <SubHeader>
-                <h1>{params.playerId}</h1>
-            </SubHeader>
+            {playerLoading ? (
+                <FullPageLoader />
+            ) : (
+                <SubHeader addlProps={{ pad: { horizontal: "small" } }}>
+                    <Heading>{params.playerId}</Heading>
+                    {player?.position && (
+                        <PositionCard positionName={player.position} />
+                    )}
+                </SubHeader>
+            )}
         </>
     )
 }

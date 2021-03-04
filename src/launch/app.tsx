@@ -20,7 +20,7 @@ const theme: ThemeType = {
     },
     button: {
         border: {
-            radius: '12px'
+            radius: '2px'
         }
     },
     tab: {
