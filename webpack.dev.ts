@@ -1,4 +1,5 @@
 import * as HtmlWebPackPlugin from "html-webpack-plugin"
+import * as Path from "path"
 
 const htmlPlugin = new HtmlWebPackPlugin( {
   template: "./src/launch/index.html"
@@ -21,6 +22,11 @@ const config = {
       { test: /\.tsx?$/, loader: "ts-loader" }
     ]
   },
+  output: {
+    path: Path.resolve( __dirname, 'dist' ),
+    filename: 'bundle.js',
+    publicPath: '/'
+},
   plugins: [ htmlPlugin ]
 }
 

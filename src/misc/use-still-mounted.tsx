@@ -12,7 +12,6 @@ const useStillMounted = () => {
     /* On cleanup, set stillMounted to false */
     React.useEffect( () => {
         return () => {
-            console.log( "false now" )
             stillMounted.current = false
         }
     }, [] )

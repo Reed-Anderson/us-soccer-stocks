@@ -71,7 +71,6 @@ const PlayersView = () => {
 
     /* Effect to populate players when component mounts */
     React.useEffect( () => {
-        console.log( stillMounted.current )
         if( stillMounted.current ) {
             if( !ptl ) {
                 setPositions( [] )
@@ -193,7 +192,7 @@ const PlayerRow = ( props: PlayerRowProps ) => {
     return (
         <Box
             align="center"
-            background={props.oddIndex ? COLORS['light-1'] : COLORS.white}
+            background={props.oddIndex ? COLORS['light-2'] : COLORS.white}
             direction="row"
             flex={false}
             pad={{ horizontal: "xsmall", vertical: "2px" }}
