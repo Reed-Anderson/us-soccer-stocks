@@ -41,14 +41,14 @@ const PositionCard = ( props: PositionCardProps ) => {
 
     if( positionLoading ) {
         return (
-            <Card align="center" height="small" justify="center" >
+            <Card align="center" height="small" justify="center" width="large">
                 <SyncLoader color={COLORS["accent-4"]} margin={5} size={20} />
             </Card>
         )
     }
 
     return (
-        <Card width="large">
+        <Card flex={false} width="large">
             <CardHeader
                 border={{ color: COLORS["light-5"], side: "bottom" }}
                 justify="start"
@@ -61,9 +61,9 @@ const PositionCard = ( props: PositionCardProps ) => {
                 <GrowDiv />
                 <Link to="/players">
                     <Button
-                        color={COLORS["accent-4"]}
+                        color={COLORS["dark-3"]}
                         icon={<Optimize />}
-                        label={`All Players`}
+                        label="All Players"
                         style={{ padding: 5, textTransform: "capitalize" }}
                     />
                 </Link>

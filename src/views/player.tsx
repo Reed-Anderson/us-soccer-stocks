@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { Player } from '../../functions/src/data/types'
 import FullPageLoader from '../components/full-page-loader'
 import MainHeader from '../components/main-header'
+import OrderPlacer from '../components/order-placer'
 import PositionCard from '../components/position-card'
 import { SubHeader } from '../components/simple-divs'
 import { useDocumentData } from '../misc/firebase-hooks'
@@ -41,6 +42,9 @@ const PlayerView = () => {
                     <Heading>{params.playerId}</Heading>
                     {player?.position && (
                         <PositionCard positionName={player.position} />
+                    )}
+                    {player && (
+                        <OrderPlacer playerId={params.playerId} />
                     )}
                 </SubHeader>
             )}

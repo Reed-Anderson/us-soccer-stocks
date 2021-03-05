@@ -5,10 +5,10 @@
  * Credit to https://v2.grommet.io/color
  */
 export const COLORS = {
-    'brand': '#228BE6',
-    'accent-1': '#6FFFB0',
+    'brand': '#c2364d',
+    'accent-1': '#81FCED',
     'accent-2': '#FD6FFF',
-    'accent-3': '#81FCED',
+    'accent-3': '#6FFFB0',
     'accent-4': '#FFCA58',
     'neutral-1': '#00873D',
     'neutral-2': '#3D138D',

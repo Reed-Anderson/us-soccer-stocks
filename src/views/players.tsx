@@ -94,6 +94,7 @@ const PlayersView = () => {
                     <>
                         <Tabs
                             activeIndex={positionIndex}
+                            flex={false}
                             margin="medium"
                             onActive={setPositionIndex}
                         >
