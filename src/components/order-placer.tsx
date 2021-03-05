@@ -1,4 +1,4 @@
-import { Box, Select } from "grommet"
+import { Box, Select, Text } from "grommet"
 import * as React from "react"
 import { PostTransactionLog, PtlPlayer } from "../../functions/src/data/types"
 import { COLORS } from "../misc/colors"
@@ -29,7 +29,7 @@ const OrderPlacer = ( props: OrderPlacerProps ) => {
     const [
         ptl,
         ptlLoading
-    ] = useDocumentData<PostTransactionLog>( "postTransactionLog/1" )
+    ] = useDocumentData<PostTransactionLog>( "postTransactionLogs/1" )
 
     const [ ptlPlayer, setPtlPlayer ] = React.useState( null as PtlPlayer )
     React.useEffect( () => {
@@ -38,7 +38,7 @@ const OrderPlacer = ( props: OrderPlacerProps ) => {
         )
     }, [ ptl ] )
 
-    const
+    const [ option, setOption ] = React.useState( options[ 0 ] )
 
     if( ptlLoading ) {
         return (
@@ -52,12 +52,67 @@ const OrderPlacer = ( props: OrderPlacerProps ) => {
             height="medium"
             margin="medium"
             pad="small"
+            round="3px"
             width="large"
         >
             <Select
+                onChange={e => setOption( e.value )}
                 options={options}
+                value={option}
             />
-            {ptlPlayer?.value}
+            {option === "Buy" && (
+                <BuySection />
+            )}
+            {option === "Sell" && (
+                <SellSection ptlPlayer={ptlPlayer} />
+            )}
+        </Box>
+    )
+}
+
+/*******************************************************************************
+ *
+ * BuySection
+ *
+ ******************************************************************************/
+
+/**
+ * Props for BuySection
+ */
+interface BuySectionProps {
+
+}
+
+/**
+ * BuySection Component
+ */
+const BuySection = ( props: BuySectionProps ) => {
+    return <div />
+}
+
+/*******************************************************************************
+ *
+ * SellSection
+ *
+ ******************************************************************************/
+
+/**
+ * Props for SellSection
+ */
+interface SellSectionProps {
+    ptlPlayer: PtlPlayer
+}
+
+/**
+ * SellSection Component
+ */
+const SellSection = ( props: SellSectionProps ) => {
+    return (
+        <Box alignContent="center" fill justify="around">
+            <Text color={COLORS["status-warning"]} textAlign="center" > 
+                You may not sell {props.ptlPlayer.displayName}. This player is
+                not in your portfolio.
+            </Text>
         </Box>
     )
 }

@@ -16,7 +16,7 @@ export const COLORS = {
     'neutral-4': '#A2423D',
     'status-critical': '#FF4040',
     'status-error': '#FF4040',
-    'status-warning': '#FFAA15',
+    'status-warning': '#d68c31',
     'status-ok': '#00C781',
     'status-unknown': '#CCCCCC',
     'status-disabled': '#CCCCCC',

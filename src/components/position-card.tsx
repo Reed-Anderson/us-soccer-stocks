@@ -83,7 +83,7 @@ const PositionCard = ( props: PositionCardProps ) => {
                 )}
             </CardBody>
             <CardFooter
-                background={COLORS["light-1"]}
+                background={COLORS["light-2"]}
                 border={{ color: COLORS["light-3"], side: "top" }}
                 pad={{ horizontal: "small", vertical: "xsmall" }}
             >
