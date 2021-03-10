@@ -92,7 +92,7 @@ const BuySection = ( props: BuySectionProps ) => {
                 <Text weight="bold">Buy</Text>
             </CardHeader>
             <CardBody justify="center" pad="small">
-                <Text color={COLORS["status-warning"]} textAlign="center"> 
+                <Text color={COLORS["status-warning"]} textAlign="center">
                     You may not sell {props.ptlPlayer.displayName} stock. This
                     player is not in your portfolio.
                 </Text>
@@ -131,7 +131,7 @@ const SellSection = ( props: SellSectionProps ) => {
                 <Text weight="bold">Sell</Text>
             </CardHeader>
             <CardBody justify="center" pad="small">
-                <Text color={COLORS["status-warning"]} textAlign="center"> 
+                <Text color={COLORS["status-warning"]} textAlign="center">
                     You may not sell {props.ptlPlayer.displayName} stock. This
                     player is not in your portfolio.
                 </Text>
