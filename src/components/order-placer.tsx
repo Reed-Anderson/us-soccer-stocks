@@ -110,8 +110,8 @@ const SellSection = ( props: SellSectionProps ) => {
     return (
         <Box alignContent="center" fill justify="around">
             <Text color={COLORS["status-warning"]} textAlign="center" > 
-                You may not sell {props.ptlPlayer.displayName}. This player is
-                not in your portfolio.
+                You may not sell {props.ptlPlayer.displayName} stock. This
+                player is not in your portfolio.
             </Text>
         </Box>
     )
