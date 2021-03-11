@@ -1,4 +1,11 @@
-import { Box, Select, Text } from "grommet"
+import {
+    Box,
+    Card,
+    CardBody,
+    CardHeader,
+    ResponsiveContext,
+    Text
+} from "grommet"
 import * as React from "react"
 import { PostTransactionLog, PtlPlayer } from "../../functions/src/data/types"
 import { COLORS } from "../misc/colors"
@@ -18,11 +25,6 @@ interface OrderPlacerProps {
 }
 
 /**
- * Options for selection
- */
-const options = [ "Buy", "Sell" ]
-
-/**
  * OrderPlacer Component
  */
 const OrderPlacer = ( props: OrderPlacerProps ) => {
@@ -38,9 +40,7 @@ const OrderPlacer = ( props: OrderPlacerProps ) => {
         )
     }, [ ptl ] )
 
-    const [ option, setOption ] = React.useState( options[ 0 ] )
-
-    if( ptlLoading ) {
+    if( !ptlPlayer ) {
         return (
             null
         )
@@ -48,24 +48,16 @@ const OrderPlacer = ( props: OrderPlacerProps ) => {
 
     return (
         <Box
-            border={{ color: COLORS["light-4"] }}
+            direction="row"
+            flex={false}
             height="medium"
+            justify="between"
             margin="medium"
-            pad="small"
-            round="3px"
             width="large"
+            wrap={true}
         >
-            <Select
-                onChange={e => setOption( e.value )}
-                options={options}
-                value={option}
-            />
-            {option === "Buy" && (
-                <BuySection />
-            )}
-            {option === "Sell" && (
-                <SellSection ptlPlayer={ptlPlayer} />
-            )}
+            <BuySection ptlPlayer={ptlPlayer} />
+            <SellSection ptlPlayer={ptlPlayer} />
         </Box>
     )
 }
@@ -80,14 +72,33 @@ const OrderPlacer = ( props: OrderPlacerProps ) => {
  * Props for BuySection
  */
 interface BuySectionProps {
-
+    ptlPlayer: PtlPlayer
 }
 
 /**
  * BuySection Component
  */
 const BuySection = ( props: BuySectionProps ) => {
-    return <div />
+    const size = React.useContext( ResponsiveContext )
+
+    return (
+        <Card width={size === "small" ? "100%" : "48%"}>
+            <CardHeader
+                border={{ color: COLORS["light-5"], side: "bottom" }}
+                justify="start"
+                pad={{ horizontal: "small", vertical: "small" }}
+                style={{ textTransform: "capitalize" }}
+            >
+                <Text weight="bold">Buy</Text>
+            </CardHeader>
+            <CardBody justify="center" pad="small">
+                <Text color={COLORS["status-warning"]} textAlign="center"> 
+                    You may not sell {props.ptlPlayer.displayName} stock. This
+                    player is not in your portfolio.
+                </Text>
+            </CardBody>
+        </Card>
+    )
 }
 
 /*******************************************************************************
@@ -107,13 +118,25 @@ interface SellSectionProps {
  * SellSection Component
  */
 const SellSection = ( props: SellSectionProps ) => {
+    const size = React.useContext( ResponsiveContext )
+
     return (
-        <Box alignContent="center" fill justify="around">
-            <Text color={COLORS["status-warning"]} textAlign="center" > 
-                You may not sell {props.ptlPlayer.displayName} stock. This
-                player is not in your portfolio.
-            </Text>
-        </Box>
+        <Card width={size === "small" ? "100%" : "48%"}>
+            <CardHeader
+                border={{ color: COLORS["light-5"], side: "bottom" }}
+                justify="start"
+                pad={{ horizontal: "small", vertical: "small" }}
+                style={{ textTransform: "capitalize" }}
+            >
+                <Text weight="bold">Sell</Text>
+            </CardHeader>
+            <CardBody justify="center" pad="small">
+                <Text color={COLORS["status-warning"]} textAlign="center"> 
+                    You may not sell {props.ptlPlayer.displayName} stock. This
+                    player is not in your portfolio.
+                </Text>
+            </CardBody>
+        </Card>
     )
 }
 
