@@ -117,7 +117,7 @@ const BuySection = ( props: BuySectionProps ) => {
     }
 
     return (
-        <Card width={size === "small" ? "100%" : "48%"}>
+        <Card border width={size === "small" ? "100%" : "48%"}>
             <CardHeader
                 border={{ color: COLORS["light-5"], side: "bottom" }}
                 justify="start"
@@ -181,7 +181,7 @@ const SellSection = ( props: SellSectionProps ) => {
     const size = React.useContext( ResponsiveContext )
 
     return (
-        <Card width={size === "small" ? "100%" : "48%"}>
+        <Card border width={size === "small" ? "100%" : "48%"}>
             <CardHeader
                 border={{ color: COLORS["light-5"], side: "bottom" }}
                 justify="start"

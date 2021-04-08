@@ -4,9 +4,21 @@
  *
  ******************************************************************************/
 
+export interface User {
+    cashOnHand: number
+    description: string
+    uid: string
+}
+
+/*******************************************************************************
+ *
+ * PostTransactionLog
+ *
+ ******************************************************************************/
+
 export interface PostTransactionLog {
     players: PtlPlayer[]
-    users: any[]
+    users: PtlUser[]
 }
 
 export interface PtlPlayer {
@@ -14,6 +26,10 @@ export interface PtlPlayer {
     position: string
     previousValue?: number
     value: number
+}
+
+export interface PtlUser {
+    uid: string
 }
 
 export const ptlGetPositionsAndPlayers = ( ptl: PostTransactionLog ) => {

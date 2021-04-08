@@ -41,14 +41,20 @@ const PositionCard = ( props: PositionCardProps ) => {
 
     if( positionLoading ) {
         return (
-            <Card align="center" height="small" justify="center" width="large">
+            <Card
+                align="center"
+                border
+                height="small"
+                justify="center"
+                width="large"
+            >
                 <SyncLoader color={COLORS["accent-4"]} margin={5} size={20} />
             </Card>
         )
     }
 
     return (
-        <Card flex={false} width="large">
+        <Card border flex={false} width="large">
             <CardHeader
                 border={{ color: COLORS["light-5"], side: "bottom" }}
                 justify="start"
