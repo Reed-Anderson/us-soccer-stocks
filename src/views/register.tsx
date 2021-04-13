@@ -16,6 +16,7 @@ import { SubHeader } from '../components/simple-divs'
 import { COLORS } from '../misc/colors'
 import MainHeader from '../components/main-header'
 import { Link, useHistory } from 'react-router-dom'
+import { NEW_USER_CASH_AMOUNT, User } from '../../functions/src/data/types'
 
 /*******************************************************************************
  *
@@ -98,11 +99,16 @@ const RegisterForm = () => {
                     formState.Email,
                     formState.Password
                 )
-            userCred.user.updateProfile( { 
-                displayName: formState.DisplayName
-            } )
 
-            history.push( '/' )
+            const user: User = {
+                cashOnHand: NEW_USER_CASH_AMOUNT,
+                description: "",
+                displayName: formState.DisplayName,
+                twitterHandle: "",
+                uid: userCred.user.uid
+            }
+            firebase.app().firestore() .doc( `users/${user.uid}` ) .set( user )
+            history.push( '/profile' )
         } catch ( e: any ) {
             setErrorMessage( e.message || 'Something went wrong!' )
         }

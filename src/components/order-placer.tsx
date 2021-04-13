@@ -60,9 +60,8 @@ const OrderPlacer = ( props: OrderPlacerProps ) => {
         <Box
             direction="row"
             flex={false}
-            height="small"
+            height={{ min: "small" }}
             justify="between"
-            margin="medium"
             width="large"
             wrap={true}
         >
@@ -117,7 +116,11 @@ const BuySection = ( props: BuySectionProps ) => {
     }
 
     return (
-        <Card border width={size === "small" ? "100%" : "48%"}>
+        <Card
+            border
+            margin={{ vertical: "medium" }}
+            width={size === "small" ? "100%" : "48%"}
+        >
             <CardHeader
                 border={{ color: COLORS["light-5"], side: "bottom" }}
                 justify="start"
@@ -126,7 +129,12 @@ const BuySection = ( props: BuySectionProps ) => {
             >
                 <Text weight="bold">Buy</Text>
             </CardHeader>
-            <CardBody gap="small" justify="center" pad="small">
+            <CardBody
+                height={{ min: "xsmall" }}
+                gap="small"
+                justify="center"
+                pad="small"
+            >
                 <Box align="center" direction="row" justify="between">
                     <Text>Cash on Hand:</Text>
                     <Box width="160px">
@@ -181,7 +189,11 @@ const SellSection = ( props: SellSectionProps ) => {
     const size = React.useContext( ResponsiveContext )
 
     return (
-        <Card border width={size === "small" ? "100%" : "48%"}>
+        <Card
+            border
+            margin={{ vertical: "medium" }}
+            width={size === "small" ? "100%" : "48%"}
+        >
             <CardHeader
                 border={{ color: COLORS["light-5"], side: "bottom" }}
                 justify="start"
@@ -190,7 +202,12 @@ const SellSection = ( props: SellSectionProps ) => {
             >
                 <Text weight="bold">Sell</Text>
             </CardHeader>
-            <CardBody justify="center" pad="small">
+            <CardBody
+                height={{ min: "xsmall" }}
+                gap="small"
+                justify="center"
+                pad="small"
+            >
                 <Text color={COLORS["status-warning"]} textAlign="center">
                     You may not sell {props.ptlPlayer.displayName} stock. This
                     player is not in your portfolio.

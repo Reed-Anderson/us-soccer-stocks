@@ -27,7 +27,7 @@ export function useDocumentData<Type>( path: string ):
                 setError( error )
             }
         )
-    }, [] )
+    }, [ path ] )
 
     return [ value, loading, error ]
 }

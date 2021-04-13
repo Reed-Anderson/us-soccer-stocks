@@ -7,6 +7,7 @@ import {
     Logout,
     Optimize,
     PieChart,
+    Trophy,
     UserAdd,
     UserManager
 } from "grommet-icons"
@@ -39,12 +40,20 @@ const MainHeader = () => {
         {
             gap: "small",
             icon: <UserManager />,
-            label: 'Profile'
+            label: 'Profile',
+            onClick: () => history.push( "/profile" )
         },
         {
             gap: "small",
             icon: <PieChart />,
-            label: 'Portfolio'
+            label: 'Portfolio',
+            onClick: () => history.push( "/portfolio" )
+        },
+        {
+            gap: "small",
+            icon: <Trophy />,
+            label: 'Leaderboard',
+            onClick: () => history.push( "/leaderboard" )
         },
         {
             gap: "small",

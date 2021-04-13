@@ -1,5 +1,12 @@
 /*******************************************************************************
  *
+ * Constants
+ *
+ ******************************************************************************/
+export const NEW_USER_CASH_AMOUNT = 6000
+
+/*******************************************************************************
+ *
  * PostTransactionLog
  *
  ******************************************************************************/
@@ -7,6 +14,8 @@
 export interface User {
     cashOnHand: number
     description: string
+    displayName: string
+    twitterHandle: string
     uid: string
 }
 
@@ -29,6 +38,7 @@ export interface PtlPlayer {
 }
 
 export interface PtlUser {
+    netWorth: number
     uid: string
 }
 
