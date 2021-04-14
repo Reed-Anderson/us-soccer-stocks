@@ -19,6 +19,7 @@ import { displayNameRegex } from './register'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { PieChart, Trophy, Twitter } from 'grommet-icons'
+import { useHistory } from 'react-router'
 
 /*******************************************************************************
  *
@@ -95,6 +96,7 @@ interface ProfileFormProps {
  */
 const ProfileForm = ( props: ProfileFormProps ) => {
     const size = React.useContext( ResponsiveContext )
+    const history = useHistory()
 
     return (
         <>
@@ -171,15 +173,15 @@ const ProfileForm = ( props: ProfileFormProps ) => {
                 <Button
                     color={COLORS['neutral-1']}
                     icon={<PieChart />}
-                    href="/portfolio"
                     label={size === "small" ? "" : "Portfolio"}
+                    onClick={() => history.push( "/portfolio" )}
                     primary
                 />
                 <Button
                     color={COLORS['neutral-4']}
                     icon={<Trophy />}
-                    href="/leaderboard"
                     label={size === "small" ? "" : "Leaderboard"}
+                    onClick={() => history.push( "/leaderboard" )}
                     primary
                 />
             </Box>

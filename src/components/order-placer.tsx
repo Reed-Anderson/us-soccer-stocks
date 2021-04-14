@@ -11,6 +11,7 @@ import {
 import { Currency } from "grommet-icons"
 import * as React from "react"
 import {
+    NEW_USER_CASH_AMOUNT,
     Order,
     OrderStatus,
     PostTransactionLog,
@@ -91,7 +92,7 @@ const BuySection = ( props: BuySectionProps ) => {
     const [ amount, setAmount ] = React.useState( 0 )
     const size = React.useContext( ResponsiveContext )
     const user = React.useContext( UserContext )
-    const cashOnHand = 997.30
+    const cashOnHand = NEW_USER_CASH_AMOUNT
 
     /**
      * Truncate number to two decimal places

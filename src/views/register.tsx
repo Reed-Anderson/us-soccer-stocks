@@ -15,7 +15,7 @@ import {
 import { SubHeader } from '../components/simple-divs'
 import { COLORS } from '../misc/colors'
 import MainHeader from '../components/main-header'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { NEW_USER_CASH_AMOUNT, User } from '../../functions/src/data/types'
 
 /*******************************************************************************
@@ -99,6 +99,9 @@ const RegisterForm = () => {
                     formState.Password
                 )
 
+            userCred.user.updateProfile( {
+                displayName: formState.DisplayName
+            } )
             const user: User = {
                 cashOnHand: NEW_USER_CASH_AMOUNT,
                 description: "",
@@ -106,7 +109,7 @@ const RegisterForm = () => {
                 twitterHandle: "",
                 uid: userCred.user.uid
             }
-            firebase.app().firestore() .doc( `users/${user.uid}` ) .set( user )
+            firebase.app().firestore().doc( `users/${user.uid}` ).set( user )
             history.push( '/profile' )
         } catch ( e: any ) {
             setErrorMessage( e.message || 'Something went wrong!' )
@@ -190,9 +193,10 @@ const RegisterForm = () => {
                 )}
                 <CardFooter justify="center">
                     <Box direction="row" gap="small">
-                        <Link to="/login">
-                            <Button label="Log In" />
-                        </Link>
+                        <Button
+                            label="Log In"
+                            onClick={() => history.push( "/login" )}
+                        />
                         <Button
                             label="Register"
                             primary
