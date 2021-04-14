@@ -32,5 +32,6 @@ export const COLORS = {
     'dark-4': '#999999',
     'dark-5': '#999999',
     'dark-6': '#999999',
-    'white': '#FFFFFF'
+    'white': '#FFFFFF',
+    'twitter': '#00ACEE'
 }

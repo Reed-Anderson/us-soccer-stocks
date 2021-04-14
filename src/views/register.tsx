@@ -24,9 +24,9 @@ import { NEW_USER_CASH_AMOUNT, User } from '../../functions/src/data/types'
  *
  ******************************************************************************/
 
-const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!$%^@#£€*?&]{8,}$/
-const displayNameRegex = /^[a-zA-Z0-9 _-]{3,16}$/
+export const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+export const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!$%^@#£€*?&]{8,}$/
+export const displayNameRegex = /^[a-zA-Z0-9 _-]{3,16}$/
 
 /*******************************************************************************
  *
@@ -82,7 +82,6 @@ const RegisterForm = () => {
     const [ formState, setFormState ] = React.useState( {
         Email: '',
         DisplayName: '',
-        MobileNumber: '',
         Password: '',
         ConfirmPassword: ''
     } )
@@ -154,11 +153,6 @@ const RegisterForm = () => {
                         regexp: displayNameRegex,
                         message: 'Invalid Display Name'
                     }}
-                />
-                <FormField
-                    name="MobileNumber"
-                    label="Mobile Number (Optional)"
-                    margin="small"
                 />
                 <FormField
                     name="Password"

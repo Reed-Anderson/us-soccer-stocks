@@ -2,6 +2,7 @@ import * as React from "react"
 import { Button, Header, Menu } from "grommet"
 import { COLORS } from "../misc/colors"
 import {
+    Github,
     Home,
     Login,
     Logout,
@@ -63,6 +64,13 @@ const MainHeader = () => {
         },
         {
             gap: "small",
+            href: "https://github.com/Reed-Anderson/us-soccer-stocks",
+            icon: <Github />,
+            label: "Github",
+            target: "_blank"
+        },
+        {
+            gap: "small",
             icon: <Logout />,
             label: 'Logout',
             onClick: logout
@@ -80,6 +88,13 @@ const MainHeader = () => {
             icon: <Login />,
             label: 'Login',
             onClick: () => history.push( "/login" )
+        },
+        {
+            gap: "small",
+            href: "https://github.com/Reed-Anderson/us-soccer-stocks",
+            icon: <Github />,
+            label: "Github",
+            target: "_blank"
         }
     ]
 
