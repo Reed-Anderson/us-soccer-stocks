@@ -38,6 +38,7 @@ export interface PtlPlayer {
 }
 
 export interface PtlUser {
+    displayName: string
     netWorth: number
     uid: string
 }

@@ -139,10 +139,13 @@ const ProfileForm = ( props: ProfileFormProps ) => {
             <Form>
                 <Box margin={{ horizontal: "small" }}>
                     <TextArea
+                        fill
                         maxLength={500}
                         onChange={e => setBio( e.target.value )}
                         placeholder="Biography"
                         resize="vertical"
+                        rows={5}
+                        size="small"
                         value={bio}
                     />
                 </Box>

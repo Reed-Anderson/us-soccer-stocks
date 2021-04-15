@@ -38,6 +38,9 @@ const theme: ThemeType = {
         hover: {
             color: COLORS["dark-2"]
         }
+    },
+    textArea: {
+        extend: `border: 1px solid ${COLORS["light-4"]};`
     }
 }
 

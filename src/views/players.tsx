@@ -15,7 +15,7 @@ import {
     Tip
 } from 'grommet'
 import { COLORS } from '../misc/colors'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { Currency, PieChart, Search, User } from 'grommet-icons'
 import {
     PostTransactionLog,
@@ -189,7 +189,10 @@ interface PlayerRowProps {
  * PlayerRow Component
  */
 const PlayerRow = ( props: PlayerRowProps ) => {
+    const history = useHistory()
     const size = React.useContext( ResponsiveContext )
+    const playerName = props.player.displayName
+
     return (
         <Box
             align="center"
@@ -198,16 +201,15 @@ const PlayerRow = ( props: PlayerRowProps ) => {
             flex={false}
             pad={{ horizontal: "xsmall", vertical: "2px" }}
         >
-            <Link to={`/players/${props.player.displayName}`}>
-                <Button
-                    color={COLORS['dark-1']}
-                    hoverIndicator
-                    icon={<User />}
-                    label={props.player.displayName}
-                    plain
-                    style={{ padding: 8 }}
-                />
-            </Link>
+            <Button
+                color={COLORS['dark-1']}
+                hoverIndicator
+                icon={<User />}
+                label={playerName}
+                onClick={() => history.push( `/players/${playerName}` )}
+                plain
+                style={{ padding: 8 }}
+            />
             {props.owned && (
                 size === "small" ? (
                     <PieChart
@@ -229,12 +231,8 @@ const PlayerRow = ( props: PlayerRowProps ) => {
                 )
             )}
             <GrowDiv />
-            <Text>
-                ${props.player.value}
-            </Text>
-            <Currency
-                style={{ padding: '0 10px' }}
-            />
+            <Text>${props.player.value}</Text>
+            <Currency style={{ padding: '0 10px' }} />
         </Box>
     )
 }
