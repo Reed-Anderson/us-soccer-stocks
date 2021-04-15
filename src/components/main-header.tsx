@@ -29,14 +29,14 @@ import firebase from 'firebase/app'
 const MainHeader = () => {
 
     const history = useHistory()
-    const user = React.useContext( UserContext )
+    const authUser = React.useContext( UserContext )
 
     const logout = async () => {
         await firebase.auth().signOut()
         history.push( "/login" )
     }
 
-    const menuItems = user.user ? [
+    const menuItems = authUser.authUser ? [
         /* Items to be shown when the user is logged in */
         {
             gap: "small",
@@ -118,7 +118,7 @@ const MainHeader = () => {
             <GrowDiv />
             <Menu
                 items={menuItems}
-                label={user.user?.displayName || "Account"}
+                label={authUser.authUser?.displayName || "Account"}
             />
         </Header>
     )

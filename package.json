@@ -1,7 +1,7 @@
 {
   "name": "blank-react-typescript",
   "version": "1.0.0",
-  "description": "A template for apps using React and Typescript",
+  "description": "A stock market simulation to track the USMNT player pool.",
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production --config webpack.prod.ts",

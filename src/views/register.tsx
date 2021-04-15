@@ -104,7 +104,7 @@ const RegisterForm = () => {
             } )
             const user: User = {
                 cashOnHand: NEW_USER_CASH_AMOUNT,
-                description: "",
+                biography: "",
                 displayName: formState.DisplayName,
                 twitterHandle: "",
                 uid: userCred.user.uid

@@ -13,7 +13,7 @@ export const NEW_USER_CASH_AMOUNT = 600
 
 export interface User {
     cashOnHand: number
-    description: string
+    biography: string
     displayName: string
     twitterHandle: string
     uid: string

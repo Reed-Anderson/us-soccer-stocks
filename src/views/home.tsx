@@ -17,7 +17,7 @@ import { useHistory } from 'react-router'
  * HomeView Component
  */
 const HomeView = () => {
-    const authUser = React.useContext( UserContext )?.user
+    const authUser = React.useContext( UserContext )?.authUser
     const history = useHistory()
 
     return (

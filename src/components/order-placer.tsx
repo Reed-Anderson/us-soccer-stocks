@@ -91,7 +91,7 @@ interface BuySectionProps {
 const BuySection = ( props: BuySectionProps ) => {
     const [ amount, setAmount ] = React.useState( 0 )
     const size = React.useContext( ResponsiveContext )
-    const user = React.useContext( UserContext )
+    const authUser = React.useContext( UserContext )
     const cashOnHand = NEW_USER_CASH_AMOUNT
 
     /**
@@ -109,7 +109,7 @@ const BuySection = ( props: BuySectionProps ) => {
             creationDate: new Date(),
             playerId: props.ptlPlayer.displayName,
             status: OrderStatus.Placed,
-            userId: user.user.uid,
+            userId: authUser.authUser.uid,
             value: amount
         }
 
