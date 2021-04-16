@@ -40,20 +40,17 @@ interface OrderPlacerProps {
  */
 const OrderPlacer = ( props: OrderPlacerProps ) => {
     const [
-        ptl,
-        ptlLoading // TODO: Use
+        ptl
     ] = useDocumentData<PostTransactionLog>( "postTransactionLogs/1" )
 
-    const [ ptlPlayer, setPtlPlayer ] = React.useState( null as PtlPlayer )
-    React.useEffect( () => {
-        setPtlPlayer(
-            ptl?.players.find( player => player.displayName === props.playerId )
-        )
-    }, [ ptl ] )
+    const ptlPlayer = React.useMemo( () => (
+        ptl?.players.find( player => player.displayName === props.playerId )
+    ), [ ptl, props.playerId ] )
+
 
     if( !ptlPlayer ) {
         return (
-            null
+            null // TODO: Loader in Buy/Sell sections
         )
     }
 
@@ -137,7 +134,7 @@ const BuySection = ( props: BuySectionProps ) => {
                 pad="small"
             >
                 <Box align="center" direction="row" justify="between">
-                    <Text>Cash on Hand:</Text>
+                    <Text>Cash to Invest:</Text>
                     <Box width="160px">
                         <TextInput
                             icon={<Currency />}

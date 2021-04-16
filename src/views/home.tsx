@@ -30,6 +30,7 @@ const HomeView = () => {
                     direction="row"
                     height="medium"
                     justify="center"
+                    pad="small"
                     style={{ position: "relative" }}
                     width="100%"
                 >

@@ -1,12 +1,19 @@
 import * as React from 'react'
-import { Box, Button, Heading, ResponsiveContext, Text } from 'grommet'
+import {
+    Box,
+    Button,
+    Heading,
+    ResponsiveContext,
+    Text,
+    TextInput
+} from 'grommet'
 import MainHeader from '../components/main-header'
 import { GrowDiv, SubHeader } from '../components/simple-divs'
 import { PostTransactionLog, PtlUser } from '../../functions/src/data/types'
 import { useDocumentData } from '../misc/firebase-hooks'
 import FullPageLoader from '../components/full-page-loader'
 import { COLORS } from '../misc/colors'
-import { Currency, UserManager } from 'grommet-icons'
+import { Currency, Search, UserManager } from 'grommet-icons'
 import { useHistory } from 'react-router-dom'
 
 /*******************************************************************************
@@ -22,10 +29,14 @@ const LeaderboardView = () => {
     const [
         ptl
     ] = useDocumentData<PostTransactionLog>( "postTransactionLogs/1" )
+    const [ userQuery, setUserQuery ] = React.useState( "" )
     const smallSize = React.useContext( ResponsiveContext ) === "small"
-    const sortedUsers = ptl?.users.sort( ( a, b ) => {
-        return a.netWorth - b.netWorth
-    } )
+    const filteredUsers = React.useMemo( () => ( ptl?.users
+        .filter( u =>
+            u.displayName.toLowerCase().includes( userQuery.toLowerCase() )
+        )
+        .sort( ( a, b ) => a.netWorth - b.netWorth )
+    ), [ ptl, userQuery ] )
 
     return (
         <>
@@ -37,13 +48,26 @@ const LeaderboardView = () => {
                     <>
                         <Heading>Leaderboard</Heading>
                         <Box
+                            flex={false}
+                            margin={{ bottom: "small" }}
+                            width="large"
+                        >
+                            <TextInput
+                                icon={<Search />}
+                                onChange={e => setUserQuery( e.target.value )}
+                                placeholder="Filter Users..."
+                                size="small"
+                                value={userQuery}
+                            />
+                        </Box>
+                        <Box
                             border={{ color: COLORS[ 'light-4' ] }}
                             margin={{ bottom: smallSize ? "" : "medium" }}
                             overflow="auto"
                             round="xxsmall"
                             width="large"
                         >
-                            {sortedUsers.map( ( ptlUser, index ) => (
+                            {filteredUsers.map( ( ptlUser, index ) => (
                                 <LeaderboardUserRow
                                     key={`ptl_user_${ptlUser.uid}`}
                                     index={index}

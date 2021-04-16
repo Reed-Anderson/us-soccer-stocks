@@ -99,6 +99,16 @@ const ProfileForm = ( props: ProfileFormProps ) => {
     const [ bio, setBio ] = React.useState( props.user.biography )
     const [ dispName, setDispName ] = React.useState( props.user.displayName )
     const [ twitter, setTwitter ] = React.useState( props.user.twitterHandle )
+
+    /**
+     * If props gives a new user, reset editable values
+     */
+    React.useEffect( () => {
+        setBio( props.user.biography || "" )
+        setDispName( props.user.displayName || "" )
+        setTwitter( props.user.twitterHandle || "" )
+    } )
+
     const netWorth = ptl?.users.find( u =>
         u.uid === props.user.uid
     )?.netWorth || props.user.cashOnHand
@@ -173,20 +183,12 @@ const ProfileForm = ( props: ProfileFormProps ) => {
                     onChange={e => setTwitter( e.target.value )}
                     readOnly={!props.userOwnsProfile}
                     required
-                    validate={{
-                        regexp: displayNameRegex,
-                        message: 'Invalid Display Name'
-                    }}
                     value={twitter}
                 />
                 <FormField
                     label="Net Worth"
                     margin="small"
                     readOnly
-                    validate={{
-                        regexp: displayNameRegex,
-                        message: 'Invalid Display Name'
-                    }}
                     value={"$" + netWorth}
                 />
             </Form>

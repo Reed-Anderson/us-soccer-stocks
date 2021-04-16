@@ -40,11 +40,11 @@ const PlayerView = () => {
             ) : (
                 <SubHeader addlProps={{ pad: { horizontal: "small" } }}>
                     <Heading>{params.playerId}</Heading>
-                    {player?.position && (
-                        <PositionCard positionName={player.position} />
-                    )}
                     {player && (
                         <OrderPlacer playerId={params.playerId} />
+                    )}
+                    {player?.position && (
+                        <PositionCard positionName={player.position} />
                     )}
                 </SubHeader>
             )}

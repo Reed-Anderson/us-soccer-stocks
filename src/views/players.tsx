@@ -114,7 +114,7 @@ const PlayersView = () => {
                             <TextInput
                                 icon={<Search />}
                                 onChange={e => setPlayerQuery( e.target.value )}
-                                placeholder="Search Player..."
+                                placeholder="Filter Players..."
                                 size="small"
                                 value={playerQuery}
                             />

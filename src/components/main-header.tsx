@@ -1,5 +1,14 @@
 import * as React from "react"
-import { Button, Header, Menu } from "grommet"
+import {
+    Box,
+    Button,
+    Drop,
+    Header,
+    Menu,
+    ResponsiveContext,
+    Text,
+    TextInput
+} from "grommet"
 import { COLORS } from "../misc/colors"
 import {
     Github,
@@ -8,14 +17,18 @@ import {
     Logout,
     Optimize,
     PieChart,
+    Search,
     Trophy,
+    User,
     UserAdd,
     UserManager
 } from "grommet-icons"
 import { GrowDiv } from "./simple-divs"
 import { UserContext } from "../misc/user-provider"
-import { Link, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import firebase from 'firebase/app'
+import { PostTransactionLog } from "../../functions/src/data/types"
+import { useDocumentData } from "../misc/firebase-hooks"
 
 /*******************************************************************************
  *
@@ -30,6 +43,7 @@ const MainHeader = () => {
 
     const history = useHistory()
     const authUser = React.useContext( UserContext )
+    const size = React.useContext( ResponsiveContext )
 
     const logout = async () => {
         await firebase.auth().signOut()
@@ -105,22 +119,165 @@ const MainHeader = () => {
             gap="none"
             pad="xsmall"
         >
-            <Link to="/">
-                <Button
-                    color={COLORS.white}
-                    icon={<Home />}
-                    hoverIndicator
-                    label="USMNT Stocks"
-                    plain
-                    style={{ padding: 10 }}
-                />
-            </Link>
+            <Button
+                color={COLORS.white}
+                icon={<Home />}
+                hoverIndicator
+                label={size === "small" ? "" : "USMNT Stocks"}
+                onClick={() => history.push( "/" )}
+                plain
+                style={{ padding: 10 }}
+            />
             <GrowDiv />
+            <GlobalSearchBar />
+            {size === "small" && (
+                <GrowDiv />
+            )}
             <Menu
                 items={menuItems}
                 label={authUser.authUser?.displayName || "Account"}
             />
         </Header>
+    )
+}
+
+/*******************************************************************************
+ *
+ * GlobalSearchBar
+ *
+ ******************************************************************************/
+
+/**
+ * GlobalSearchBar Component
+ */
+const GlobalSearchBar = () => {
+    const [ searchString, setSearchString ] = React.useState( "" )
+    const [ suggestOpen, setSuggestOpen ] = React.useState( false )
+    const targetRef = React.useRef()
+    const [
+        ptl
+    ] = useDocumentData<PostTransactionLog>( "postTransactionLogs/1" )
+
+    const suggestedUsers = React.useMemo( () => {
+        return ptl?.users.filter( ptlUser =>
+            ptlUser.displayName
+                .toLowerCase()
+                .includes( searchString.toLowerCase() )
+
+        )
+    }, [ searchString, ptl ] )
+    const suggestedPlayers = React.useMemo( () => {
+        return ptl?.players.filter( ptlPlayer =>
+            ptlPlayer.displayName
+                .toLowerCase()
+                .includes( searchString.toLowerCase() )
+        )
+    }, [ searchString, ptl ] )
+
+
+    const onChange = ( e: React.ChangeEvent<HTMLInputElement> ) => {
+        setSearchString( e.target.value )
+        setSuggestOpen( !!e.target.value )
+    }
+
+    const onEsc = () => {
+        setSuggestOpen( false )
+        setSearchString( "" )
+    }
+
+    return (
+        <Box margin={{ horizontal: "medium" }} width="small">
+            <TextInput
+                color={COLORS.white}
+                icon={<Search />}
+                onChange={onChange}
+                onFocus={() => setSuggestOpen( !!searchString )}
+                ref={targetRef}
+                size="small"
+                value={searchString}
+            />
+            {suggestOpen && (
+                <Drop
+                    align={{ top: 'bottom', right: 'right' }}
+                    onClickOutside={() => setSuggestOpen( false )}
+                    onEsc={onEsc}
+                    target={targetRef.current}
+                >
+                    <Box
+                        height={{ max: "medium" }}
+                        onClick={( e: any ) => e.preventDefault()}
+                    >
+                        {suggestedPlayers.map( suggestedPlayer => (
+                            <GlobalSearchSuggestion
+                                key={`players_${suggestedPlayer.displayName}`}
+                                closeSuggest={() => setSuggestOpen( false )}
+                                displayValue={suggestedPlayer.displayName}
+                                icon={<User />}
+                                setSearchString={setSearchString}
+                                to={`/players/${suggestedPlayer.displayName}`}
+                            />
+                        ) )}
+                        {suggestedUsers.map( suggestedUser => (
+                            <GlobalSearchSuggestion
+                                key={`users_${suggestedUser.displayName}`}
+                                closeSuggest={() => setSuggestOpen( false )}
+                                displayValue={suggestedUser.displayName}
+                                icon={<UserManager />}
+                                setSearchString={setSearchString}
+                                to={`/profile/${suggestedUser.uid}`}
+                            />
+                        ) )}
+                    </Box>
+                </Drop>
+            )}
+        </Box>
+    )
+}
+
+/*******************************************************************************
+ *
+ * GlobalSearchSuggestion
+ *
+ ******************************************************************************/
+
+/**
+ * Props for GlobalSearchSuggestion
+ */
+interface GlobalSearchSuggestionProps {
+    closeSuggest: () => void
+    displayValue: string
+    icon: JSX.Element
+    setSearchString: ( searchString: string ) => void
+    to: string
+}
+
+/**
+ * GlobalSearchSuggestion Component
+ */
+const GlobalSearchSuggestion = ( props: GlobalSearchSuggestionProps ) => {
+    const history = useHistory()
+
+    const onClick = () => {
+        history.push( props.to )
+        props.setSearchString( "" )
+        props.closeSuggest()
+    }
+
+    return (
+        <Box flex={false} pad="2px">
+            <Button
+                fill
+                hoverIndicator
+                onClick={onClick}
+                plain
+                style={{ alignItems: "center", display: "flex", padding: 10 }}
+            >
+                {props.icon}
+                <Text margin={{ left: "small" }}>
+                    {props.displayValue}
+                </Text>
+            </Button>
+        </Box>
     )
 }
 
