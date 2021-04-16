@@ -25,7 +25,7 @@ const ViewSwitch = () => {
             <Route exact component={HomeView} path="/" />
             <Route exact component={RegisterView} path="/register" />
             <Route exact component={LoginView} path="/login" />
-            <Route exact component={ProfileView} path="/profile" />
+            <Route exact component={ProfileView} path="/profile/:uid?" />
             <Route exact component={PortfolioView} path="/portfolio" />
             <Route exact component={LeaderboardView} path="/leaderboard" />
             <Route exact component={PlayersView} path="/players" />

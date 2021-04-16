@@ -17,7 +17,7 @@ import { UserContext } from '../misc/user-provider'
 import { COLORS } from '../misc/colors'
 import { displayNameRegex } from './register'
 import { Checkmark, PieChart, Trophy, Twitter } from 'grommet-icons'
-import { useHistory } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 import firebase from 'firebase/app'
 
 /*******************************************************************************
@@ -26,20 +26,18 @@ import firebase from 'firebase/app'
  *
  ******************************************************************************/
 
-interface ProfileViewProps {
-    requestedUserId?: string
+interface ProfileViewParams {
+    uid?: string
 }
 
 /**
  * HomeView Component
  */
-const ProfileView = ( props: ProfileViewProps ) => {
+const ProfileView = () => {
+    const { uid } = useParams<ProfileViewParams>()
     const userContext = React.useContext( UserContext )
-    const [ requestedUser ] = useDocumentData<User>(
-        `users/${props.requestedUserId}`
-    )
-
-    const user = props.requestedUserId ? requestedUser : userContext.user
+    const [ requestedUser ] = useDocumentData<User>( `users/${uid}` )
+    const user = uid ? requestedUser : userContext.user
     const userOwnsProfile = userContext.authUser?.uid === user?.uid
 
     return (
@@ -49,7 +47,7 @@ const ProfileView = ( props: ProfileViewProps ) => {
                 <FullPageLoader />
             ) : (
                 <SubHeader addlProps={{ pad: { horizontal: "small" } }}>
-                    <Heading>{userContext.user.displayName}</Heading>
+                    <Heading>{user.displayName}</Heading>
                     <Box
                         background={COLORS['white']}
                         border={{ color: COLORS['dark-5'], size: 'small' }}
@@ -61,7 +59,7 @@ const ProfileView = ( props: ProfileViewProps ) => {
                     >
                         <ProfileForm
                             authUser={userContext.authUser}
-                            user={userContext.user}
+                            user={user}
                             userOwnsProfile={userOwnsProfile}
                         />
                     </Box>
@@ -91,7 +89,6 @@ interface ProfileFormProps {
  * ProfileForm Component
  */
 const ProfileForm = ( props: ProfileFormProps ) => {
-    const history = useHistory()
     const [
         ptl
     ] = useDocumentData<PostTransactionLog>( "postTransactionLogs/1" )
@@ -143,6 +140,7 @@ const ProfileForm = ( props: ProfileFormProps ) => {
                         maxLength={500}
                         onChange={e => setBio( e.target.value )}
                         placeholder="Biography"
+                        readOnly={!props.userOwnsProfile}
                         resize="vertical"
                         rows={5}
                         size="small"
@@ -161,6 +159,7 @@ const ProfileForm = ( props: ProfileFormProps ) => {
                     label="Display Name"
                     margin="small"
                     onChange={e => setDispName( e.target.value )}
+                    readOnly={!props.userOwnsProfile}
                     required
                     validate={{
                         regexp: displayNameRegex,
@@ -172,6 +171,7 @@ const ProfileForm = ( props: ProfileFormProps ) => {
                     label="Twitter Handle"
                     margin="small"
                     onChange={e => setTwitter( e.target.value )}
+                    readOnly={!props.userOwnsProfile}
                     required
                     validate={{
                         regexp: displayNameRegex,
