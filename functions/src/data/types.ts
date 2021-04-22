@@ -110,9 +110,9 @@ export const dividendToText = ( dividend: keyof Position ) => {
  ******************************************************************************/
 
 export enum OrderStatus {
-    "Placed",
-    "Cancelled",
-    "Fulfilled"
+    Placed = "Placed",
+    Cancelled = "Cancelled",
+    Fulfilled = "Fulfilled"
 }
 
 export interface Order {

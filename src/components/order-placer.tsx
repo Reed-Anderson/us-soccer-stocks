@@ -4,11 +4,13 @@ import {
     Card,
     CardBody,
     CardHeader,
+    CheckBox,
+    Heading,
     ResponsiveContext,
     Text,
     TextInput
 } from "grommet"
-import { Currency } from "grommet-icons"
+import { Checkmark, Currency, Optimize, PieChart, User } from "grommet-icons"
 import * as React from "react"
 import {
     NEW_USER_CASH_AMOUNT,
@@ -21,6 +23,9 @@ import { COLORS } from "../misc/colors"
 import { useDocumentData } from "../misc/firebase-hooks"
 import firebase from 'firebase/app'
 import { UserContext } from "../misc/user-provider"
+import Modal from "./modal"
+import { MoonLoader } from "react-spinners"
+import { useHistory } from "react-router"
 
 /*******************************************************************************
  *
@@ -61,7 +66,7 @@ const OrderPlacer = ( props: OrderPlacerProps ) => {
             height={{ min: "small" }}
             justify="between"
             width="large"
-            wrap={true}
+            wrap
         >
             <BuySection ptlPlayer={ptlPlayer} />
             <SellSection ptlPlayer={ptlPlayer} />
@@ -86,6 +91,9 @@ interface BuySectionProps {
  * BuySection Component
  */
 const BuySection = ( props: BuySectionProps ) => {
+    const [ confirmerOpen, setConfirmerOpen ] = React.useState( false )
+    const [ orderLoading, setOrderLoading ] = React.useState( false )
+    const [ orderConfirmed, setOrderConfirmed ] = React.useState( false )
     const [ amount, setAmount ] = React.useState( 0 )
     const size = React.useContext( ResponsiveContext )
     const authUser = React.useContext( UserContext )
@@ -101,16 +109,17 @@ const BuySection = ( props: BuySectionProps ) => {
     /**
      * TODO: A lot. At least put this behind a confirmation modal.
      */
-    const placeOrder = () => {
-        const order: Order = {
+    const placeOrder = async () => {
+        setOrderLoading( true )
+        await firebase.app().firestore().collection( "orders" ).add( {
             creationDate: new Date(),
             playerId: props.ptlPlayer.displayName,
             status: OrderStatus.Placed,
             userId: authUser.authUser.uid,
             value: amount
-        }
-
-        firebase.app().firestore().doc( "orders/afjksldfjasehf" ).set( order )
+        } as Order )
+        setOrderConfirmed( true )
+        setOrderLoading( false )
     }
 
     return (
@@ -119,10 +128,21 @@ const BuySection = ( props: BuySectionProps ) => {
             margin={{ vertical: "medium" }}
             width={size === "small" ? "100%" : "48%"}
         >
+            {confirmerOpen && (
+                <BuyConfirmer
+                    amount={amount}
+                    cashOnHand={cashOnHand}
+                    closeFn={() => setConfirmerOpen( false )}
+                    confirmed={orderConfirmed}
+                    confirmFn={placeOrder}
+                    loading={orderLoading}
+                    ptlPlayer={props.ptlPlayer}
+                />
+            )}
             <CardHeader
                 border={{ color: COLORS["light-5"], side: "bottom" }}
                 justify="start"
-                pad={{ horizontal: "small", vertical: "small" }}
+                pad="small"
                 style={{ textTransform: "capitalize" }}
             >
                 <Text weight="bold">Buy</Text>
@@ -160,11 +180,216 @@ const BuySection = ( props: BuySectionProps ) => {
                 <Button
                     disabled={amount <= 0 || amount > cashOnHand}
                     label="Buy"
-                    onClick={placeOrder}
+                    onClick={() => setConfirmerOpen( true )}
                 />
             </CardBody>
         </Card>
     )
+}
+
+/*******************************************************************************
+ *
+ * BuyConfirmer
+ *
+ ******************************************************************************/
+
+/**
+ * Props for BuyConfirmer
+ */
+interface BuyConfirmerProps {
+    amount: number
+    cashOnHand: number
+    closeFn: () => void
+    confirmed: boolean
+    confirmFn: () => void
+    loading: boolean
+    ptlPlayer: PtlPlayer
+}
+
+/**
+ * BuyConfirmer Component
+ */
+const BuyConfirmer = ( props: BuyConfirmerProps ) => {
+    const [ understands, setUnderstands ] = React.useState( false )
+    const size = React.useContext( ResponsiveContext )
+    const history = useHistory()
+
+    const inputWidths = size === "small" ? "160px" : "215px"
+    const textBoxMargin = { left: size === "small" ? "medium" : "" }
+
+    if( props.confirmed ) {
+        return (
+            <Modal
+                closeFn={props.closeFn}
+                title="Confirm Purchase"
+            >
+                <Box
+                    align="center"
+                    height="350px"
+                    justify="center"
+                    width="500px"
+                >
+                    <Checkmark color={COLORS["status-ok"]} size="large" />
+                    <Heading level={2}>Order Placed</Heading>
+                    <Box direction="row" gap="small" justify="around">
+                        <Button
+                            icon={<Optimize />}
+                            label="Players"
+                            onClick={() => history.push( "/players" )}
+                        />
+                        <Button
+                            icon={<PieChart />}
+                            label="Portfolio"
+                            onClick={() => history.push( "/portfolio" )}
+                        />
+                    </Box>
+                </Box>
+            </Modal>
+        )
+    }
+    else if( props.loading ) {
+        return (
+            <Modal
+                closeFn={props.closeFn}
+                title="Confirm Purchase"
+            >
+                <Box
+                    align="center"
+                    height="350px"
+                    justify="center"
+                    width="500px"
+                >
+                    <MoonLoader color={COLORS[ 'neutral-4' ]} size={120} />
+                </Box>
+            </Modal>
+        )
+    }
+    else {
+        return (
+            <Modal
+                closeFn={props.closeFn}
+                title="Confirm Purchase"
+            >
+                <Box
+                    height="350px"
+                    pad={{ horizontal: "medium", vertical: "small" }}
+                    width="500px"
+                >
+                    <Box
+                        align="center"
+                        direction="row"
+                        flex={false}
+                        justify="between"
+                    >
+                        <Box direction="row" gap="xsmall">
+                            <Text>Player:</Text>
+                        </Box>
+                        <Box width={inputWidths}>
+                            <TextInput
+                                plain
+                                readOnly
+                                value={props.ptlPlayer.displayName}
+                            />
+                        </Box>
+                    </Box>
+                    <Box
+                        align="center"
+                        direction="row"
+                        flex={false}
+                        justify="between"
+                    >
+                        <Text>Investment Amount:</Text>
+                        <Box width={inputWidths}>
+                            <TextInput
+                                icon={<Currency />}
+                                plain
+                                readOnly
+                                type="number"
+                                value={props.amount}
+                            />
+                        </Box>
+                    </Box>
+                    <Box
+                        align="center"
+                        border={{
+                            color: COLORS["light-4"],
+                            side: "bottom"
+                        }}
+                        direction="row"
+                        flex={false}
+                        justify="between"
+                    >
+                        <Text>Remaining Cash:</Text>
+                        <Box width={inputWidths}>
+                            <TextInput
+                                icon={<Currency />}
+                                plain
+                                readOnly
+                                type="number"
+                                value={props.cashOnHand - props.amount}
+                            />
+                        </Box>
+                    </Box>
+                    <Box
+                        align="center"
+                        direction="row"
+                        flex={false}
+                        justify="between"
+                    >
+                        <Text>Previous Price:</Text>
+                        <Box width={inputWidths}>
+                            <TextInput
+                                icon={<Currency />}
+                                plain
+                                readOnly
+                                type="number"
+                                value={props.ptlPlayer.value}
+                            />
+                        </Box>
+                    </Box>
+                    <Box
+                        align="center"
+                        direction="row"
+                        flex={false}
+                        justify="between"
+                        margin={{ bottom: "xsmall" }}
+                    >
+                        <Text>Estimated quantity:</Text>
+                        <Box width={inputWidths}>
+                            <TextInput
+                                icon={<User />}
+                                plain
+                                readOnly
+                                type="number"
+                                value={props.amount / props.ptlPlayer.value}
+                            />
+                        </Box>
+                    </Box>
+                    <Box style={{ lineHeight: "1.75em" }}>
+                        <CheckBox
+                            checked={understands}
+                            onChange={() => setUnderstands( !understands )}
+                            label={(
+                                <Box margin={textBoxMargin}>
+                                    <Text size="small">
+                                        I understand that my transaction price
+                                        may be higher than the price shown.
+                                    </Text>
+                                </Box>
+                            )}
+                        />
+                    </Box>
+                    <Button
+                        disabled={!understands}
+                        label="Confirm"
+                        margin={{ top: "small" }}
+                        onClick={props.confirmFn}
+                        primary
+                    />
+                </Box>
+            </Modal>
+        )
+    }
 }
 
 /*******************************************************************************

@@ -107,7 +107,7 @@ const ProfileForm = ( props: ProfileFormProps ) => {
         setBio( props.user.biography || "" )
         setDispName( props.user.displayName || "" )
         setTwitter( props.user.twitterHandle || "" )
-    } )
+    }, [ props.user ] )
 
     const netWorth = ptl?.users.find( u =>
         u.uid === props.user.uid
