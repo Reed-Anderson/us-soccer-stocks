@@ -21,8 +21,6 @@ The objective is to create a stock market game with American soccer players as â
 1. MoonLoader
 	- FullPageLoader
 	- Modals
-2. SyncLoader
-	- Wide Cards
-3. HashLoader
+2. HashLoader
 	- Square Cards
 	- Tall Cards

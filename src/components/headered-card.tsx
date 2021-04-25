@@ -1,7 +1,8 @@
 import * as React from "react"
-import { BoxTypes, Card, CardBody, CardHeader, Text } from "grommet"
+import { Box, BoxTypes, Card, CardBody, CardHeader, Text } from "grommet"
 import { COLORS } from "../misc/colors"
 import { GrowDiv } from "./simple-divs"
+import { HashLoader } from "react-spinners"
 
 /*******************************************************************************
  *
@@ -14,6 +15,8 @@ import { GrowDiv } from "./simple-divs"
  */
 interface HeaderedCardProps {
     addlCardProps?: BoxTypes
+    loading?: boolean
+    message?: string
     rightHeaderElement?: JSX.Element
     title: string
 }
@@ -36,6 +39,18 @@ const HeaderedCard: React.FC<HeaderedCardProps> = props => {
                 {props.rightHeaderElement}
             </CardHeader>
             <CardBody>
+                {props.loading && (
+                    <Box align="center" fill justify="center">
+                        <HashLoader color={COLORS['neutral-3']} />
+                    </Box>
+                )}
+                {!props.loading && props.message && (
+                    <Box align="center" fill justify="center">
+                        <Text color={COLORS['status-warning']}>
+                            {props.message}
+                        </Text>
+                    </Box>
+                )}
                 {props.children}
             </CardBody>
         </Card>

@@ -109,17 +109,27 @@ const BuySection = ( props: BuySectionProps ) => {
     }
 
     /**
-     * TODO: A lot. At least put this behind a confirmation modal.
+     * Places the order in firestore
      */
     const placeOrder = async () => {
         setOrderLoading( true )
-        await firebase.app().firestore().collection( "orders" ).add( {
+        const nextId = firebase
+            .app()
+            .firestore()
+            .collection( "orders" )
+            .doc()
+            .id
+
+        const nextOrder: Order = {
             creationDate: new Date(),
             playerId: props.ptlPlayer.displayName,
             status: OrderStatus.Placed,
+            uid: nextId,
             userId: authUser.authUser.uid,
             value: amount
-        } as Order )
+        }
+        await firebase.firestore().doc( `orders/${nextId}` ).set( nextOrder )
+
         setOrderConfirmed( true )
         setOrderLoading( false )
     }

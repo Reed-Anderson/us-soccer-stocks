@@ -119,6 +119,7 @@ export interface Order {
     creationDate: Date
     playerId: string
     status: OrderStatus
+    uid: string
     userId: string
     value: number
 }
