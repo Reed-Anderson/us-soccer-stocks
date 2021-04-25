@@ -54,7 +54,7 @@ const PositionCard = ( props: PositionCardProps ) => {
     }
 
     return (
-        <Card border flex={false} width="large">
+        <Card border flex={false} margin={{ bottom: "medium" }} width="large">
             <CardHeader
                 border={{ color: COLORS["light-5"], side: "bottom" }}
                 justify="start"

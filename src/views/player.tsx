@@ -38,7 +38,7 @@ const PlayerView = () => {
             {playerLoading ? (
                 <FullPageLoader />
             ) : (
-                <SubHeader addlProps={{ pad: { horizontal: "small" } }}>
+                <SubHeader addlProps={{ pad: { horizontal: "medium" } }}>
                     <Heading>{params.playerId}</Heading>
                     {player && (
                         <OrderPlacer playerId={params.playerId} />

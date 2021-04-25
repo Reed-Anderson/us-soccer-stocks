@@ -23,6 +23,11 @@ const theme: ThemeType = {
             radius: '2px'
         }
     },
+    card: {
+        container: {
+            round: "3px"
+        }
+    },
     tab: {
         active: {
             color: COLORS["neutral-3"]

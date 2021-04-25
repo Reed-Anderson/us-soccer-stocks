@@ -47,6 +47,7 @@ const OrderPlacer = ( props: OrderPlacerProps ) => {
     const [
         ptl
     ] = useDocumentData<PostTransactionLog>( "postTransactionLogs/1" )
+    const size = React.useContext( ResponsiveContext )
 
     const ptlPlayer = React.useMemo( () => (
         ptl?.players.find( player => player.displayName === props.playerId )
@@ -61,12 +62,13 @@ const OrderPlacer = ( props: OrderPlacerProps ) => {
 
     return (
         <Box
-            direction="row"
+            direction={size === "small" ? "column" : "row"}
             flex={false}
+            gap="medium"
             height={{ min: "small" }}
             justify="between"
+            margin={{ bottom: "medium" }}
             width="large"
-            wrap
         >
             <BuySection ptlPlayer={ptlPlayer} />
             <SellSection ptlPlayer={ptlPlayer} />
@@ -123,11 +125,7 @@ const BuySection = ( props: BuySectionProps ) => {
     }
 
     return (
-        <Card
-            border
-            margin={{ vertical: "medium" }}
-            width={size === "small" ? "100%" : "48%"}
-        >
+        <Card border width={size === "small" ? "100%" : "48%"}>
             {confirmerOpen && (
                 <BuyConfirmer
                     amount={amount}
@@ -412,11 +410,7 @@ const SellSection = ( props: SellSectionProps ) => {
     const size = React.useContext( ResponsiveContext )
 
     return (
-        <Card
-            border
-            margin={{ vertical: "medium" }}
-            width={size === "small" ? "100%" : "48%"}
-        >
+        <Card border width={size === "small" ? "100%" : "48%"}>
             <CardHeader
                 border={{ color: COLORS["light-5"], side: "bottom" }}
                 justify="start"
