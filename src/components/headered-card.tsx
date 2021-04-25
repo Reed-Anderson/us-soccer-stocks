@@ -1,6 +1,7 @@
 import * as React from "react"
 import { BoxTypes, Card, CardBody, CardHeader, Text } from "grommet"
 import { COLORS } from "../misc/colors"
+import { GrowDiv } from "./simple-divs"
 
 /*******************************************************************************
  *
@@ -13,6 +14,7 @@ import { COLORS } from "../misc/colors"
  */
 interface HeaderedCardProps {
     addlCardProps?: BoxTypes
+    rightHeaderElement?: JSX.Element
     title: string
 }
 
@@ -30,6 +32,8 @@ const HeaderedCard: React.FC<HeaderedCardProps> = props => {
                 style={{ textTransform: "capitalize" }}
             >
                 <Text weight="bold">{props.title}</Text>
+                <GrowDiv />
+                {props.rightHeaderElement}
             </CardHeader>
             <CardBody>
                 {props.children}

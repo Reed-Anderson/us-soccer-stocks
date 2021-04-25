@@ -28,6 +28,7 @@ const Modal: React.FC<ModalProps> = props => {
                 align='center'
                 as='header'
                 background={COLORS["light-2"]}
+                border={{ color: COLORS["light-6"], side: "bottom" }}
                 direction='row'
             >
                 <Heading level={5} margin="small">

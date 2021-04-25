@@ -1,18 +1,10 @@
 import * as React from 'react'
-import {
-    Box,
-    Card,
-    CardBody,
-    CardHeader,
-    Heading,
-    ResponsiveContext,
-    Text
-} from 'grommet'
+import { Box, Heading, Text } from 'grommet'
 import MainHeader from '../components/main-header'
 import { SubHeader } from '../components/simple-divs'
 import { COLORS } from '../misc/colors'
 import { Order } from '../../functions/src/data/types'
-import { HashLoader } from 'react-spinners'
+import { HashLoader, SyncLoader } from 'react-spinners'
 import HeaderedCard from '../components/headered-card'
 
 /*******************************************************************************
@@ -25,19 +17,16 @@ import HeaderedCard from '../components/headered-card'
  * PortfolioView Component
  */
 const PortfolioView = () => {
-    const size = React.useContext( ResponsiveContext )
-
     return (
         <>
             <MainHeader />
             <SubHeader addlProps={{ pad: { horizontal: "small" } }}>
                 <Heading>Portfolio</Heading>
                 <Box
-                    direction={size === "small" ? "column" : "row"}
-                    gap="medium"
+                    direction="row"
                     height="large"
                     margin={{ bottom: "medium" }}
-                    width="xlarge"
+                    wrap
                 >
                     <PorfolioList />
                     <PlacedOrdersList />
@@ -54,22 +43,36 @@ const PortfolioView = () => {
  ******************************************************************************/
 
 /**
- * Props for PorfolioList
- */
-interface PorfolioListProps {
-
-}
-
-/**
  * PorfolioList Component
  */
-const PorfolioList = ( props: PorfolioListProps ) => {
+const PorfolioList = () => {
+    const [
+        orders,
+        ordersLoading
+    ] = [ [] as Order[], false ]
+
     return (
         <HeaderedCard
-            addlCardProps={{ width: "large" }}
+            addlCardProps={{ margin: "small", width: "large" }}
             title="Player Portfolio"
         >
-            Hi
+            {ordersLoading && (
+                <Box align="center" fill justify="center">
+                    <SyncLoader color={COLORS['neutral-3']} />
+                </Box>
+            )}
+            {!ordersLoading && !orders.length && (
+                <Box align="center" fill justify="center">
+                    <Text color={COLORS['status-warning']}>
+                        No players in this portfolio.
+                    </Text>
+                </Box>
+            )}
+            {orders.map( () => (
+                <div key={Math.random() /* TODO */}>
+                    Hi Reed
+                </div>
+            ) )}
         </HeaderedCard>
     )
 }
@@ -81,30 +84,30 @@ const PorfolioList = ( props: PorfolioListProps ) => {
  ******************************************************************************/
 
 /**
- * Props for PlacedOrdersList
- */
-interface PlacedOrdersListProps {
-
-}
-
-/**
  * PlacedOrdersList Component
  */
-const PlacedOrdersList = ( props: PlacedOrdersListProps ) => {
+const PlacedOrdersList = () => {
     const [
         orders,
         ordersLoading
-    ] = [ [] as Order[], true ]
+    ] = [ [] as Order[], false ]
 
     return (
-        <HeaderedCard addlCardProps={{ width: "medium" }} title="Orders Placed">
+        <HeaderedCard
+            addlCardProps={{ margin: "small", width: "medium" }}
+            title="Orders Placed"
+        >
             {ordersLoading && (
                 <Box align="center" fill justify="center">
                     <HashLoader color={COLORS['neutral-3']} />
                 </Box>
             )}
             {!ordersLoading && !orders.length && (
-                null
+                <Box align="center" fill justify="center">
+                    <Text color={COLORS['status-warning']}>
+                        No orders to display.
+                    </Text>
+                </Box>
             )}
             {orders.map( () => (
                 <div key={Math.random() /* TODO */}>
