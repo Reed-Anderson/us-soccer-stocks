@@ -15,7 +15,7 @@ import {
 import { SubHeader } from '../components/simple-divs'
 import { COLORS } from '../misc/colors'
 import MainHeader from '../components/main-header'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 /*******************************************************************************
  *
@@ -135,9 +135,10 @@ const LoginForm = () => {
                 )}
                 <CardFooter justify="center">
                     <Box direction="row" gap="small">
-                        <Link to="/register">
-                            <Button label="Register" />
-                        </Link>
+                        <Button
+                            label="Register"
+                            onClick={() => history.push( "/register" )}
+                        />
                         <Button
                             label="Log In"
                             primary

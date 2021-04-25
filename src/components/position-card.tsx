@@ -10,7 +10,7 @@ import {
 } from "grommet"
 import { Optimize } from "grommet-icons"
 import * as React from "react"
-import { Link } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { SyncLoader } from "react-spinners"
 import { dividendToText, Position } from "../../functions/src/data/types"
 import { COLORS } from "../misc/colors"
@@ -38,6 +38,7 @@ const PositionCard = ( props: PositionCardProps ) => {
         position,
         positionLoading
     ] = useDocumentData<Position>( `positions/${props.positionName}` )
+    const history = useHistory()
 
     if( positionLoading ) {
         return (
@@ -54,9 +55,15 @@ const PositionCard = ( props: PositionCardProps ) => {
     }
 
     return (
-        <Card border flex={false} margin={{ bottom: "medium" }} width="large">
+        <Card
+            border={{ color: COLORS["light-6"] }}
+            flex={false}
+            margin={{ bottom: "medium" }}
+            width="large"
+        >
             <CardHeader
                 border={{ color: COLORS["light-5"], side: "bottom" }}
+                background={COLORS["light-2"]}
                 justify="start"
                 gap="none"
                 pad={{ horizontal: "small", vertical: "xsmall" }}
@@ -65,14 +72,15 @@ const PositionCard = ( props: PositionCardProps ) => {
                 <Text weight="bold">Position:</Text>
                 <Text margin="xsmall">{props.positionName}</Text>
                 <GrowDiv />
-                <Link to="/players">
-                    <Button
-                        color={COLORS["dark-3"]}
-                        icon={<Optimize />}
-                        label="All Players"
-                        style={{ padding: 5, textTransform: "capitalize" }}
-                    />
-                </Link>
+                <Button
+                    color={COLORS["dark-2"]}
+                    icon={<Optimize />}
+                    hoverIndicator={COLORS["light-4"]}
+                    label="Players"
+                    onClick={() => history.push( "/players" )}
+                    plain
+                    style={{ padding: 5, textTransform: "capitalize" }}
+                />
             </CardHeader>
             <CardBody direction="row" flex pad="small" wrap>
                 {position && (
@@ -89,8 +97,7 @@ const PositionCard = ( props: PositionCardProps ) => {
                 )}
             </CardBody>
             <CardFooter
-                background={COLORS["light-2"]}
-                border={{ color: COLORS["light-3"], side: "top" }}
+                border={{ color: COLORS["light-4"], side: "top" }}
                 pad={{ horizontal: "small", vertical: "xsmall" }}
             >
                 <Text size="small">

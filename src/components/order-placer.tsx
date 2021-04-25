@@ -125,7 +125,10 @@ const BuySection = ( props: BuySectionProps ) => {
     }
 
     return (
-        <Card border width={size === "small" ? "100%" : "48%"}>
+        <Card
+            border={{ color: COLORS["light-6"] }}
+            width={size === "small" ? "100%" : "48%"}
+        >
             {confirmerOpen && (
                 <BuyConfirmer
                     amount={amount}
@@ -138,6 +141,7 @@ const BuySection = ( props: BuySectionProps ) => {
                 />
             )}
             <CardHeader
+                background={COLORS["light-2"]}
                 border={{ color: COLORS["light-5"], side: "bottom" }}
                 justify="start"
                 pad="small"
@@ -410,8 +414,12 @@ const SellSection = ( props: SellSectionProps ) => {
     const size = React.useContext( ResponsiveContext )
 
     return (
-        <Card border width={size === "small" ? "100%" : "48%"}>
+        <Card
+            border={{ color: COLORS["light-6"] }}
+            width={size === "small" ? "100%" : "48%"}
+        >
             <CardHeader
+                background={COLORS["light-2"]}
                 border={{ color: COLORS["light-5"], side: "bottom" }}
                 justify="start"
                 pad={{ horizontal: "small", vertical: "small" }}
