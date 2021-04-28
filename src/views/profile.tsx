@@ -8,7 +8,11 @@ import {
     ResponsiveContext,
     TextArea
 } from 'grommet'
-import { PostTransactionLog, User } from '../../functions/src/data/types'
+import {
+    NEW_USER_CASH_AMOUNT,
+    PostTransactionLog,
+    User
+} from '../../functions/src/data/types'
 import FullPageLoader from '../components/full-page-loader'
 import MainHeader from '../components/main-header'
 import { SubHeader } from '../components/simple-divs'
@@ -111,7 +115,7 @@ const ProfileForm = ( props: ProfileFormProps ) => {
 
     const netWorth = ptl?.users.find( u =>
         u.uid === props.user.uid
-    )?.netWorth || props.user.cashOnHand
+    )?.netWorth || NEW_USER_CASH_AMOUNT
 
     /**
      * Variables for Saving Changes

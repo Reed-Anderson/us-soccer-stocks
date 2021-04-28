@@ -1,10 +1,10 @@
 import * as React from "react"
 
-/******************************************************************************
+/*******************************************************************************
  *
  * Custom hook to track whether the component has been unmounted
  *
- *****************************************************************************/
+ ******************************************************************************/
 const useStillMounted = () => {
     /* Initialize stillMounted reference to true */
     const stillMounted = React.useRef( true )

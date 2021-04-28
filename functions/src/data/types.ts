@@ -1,3 +1,5 @@
+import firebase from "firebase"
+
 /*******************************************************************************
  *
  * Constants
@@ -116,7 +118,7 @@ export enum OrderStatus {
 }
 
 export interface Order {
-    creationDate: Date
+    creationDate: firebase.firestore.Timestamp
     playerId: string
     status: OrderStatus
     uid: string

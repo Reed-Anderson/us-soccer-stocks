@@ -18,7 +18,7 @@ export function useDocumentData<Type>( path: string ):
     /* Effect so the listener is only set once */
     React.useEffect( () => {
         const doc = firebase.app().firestore().doc( path )
-        doc.onSnapshot(
+        const unsubscribe = doc.onSnapshot(
             snapshot => {
                 setLoading( false )
                 setValue( snapshot.data() as Type )
@@ -28,16 +28,17 @@ export function useDocumentData<Type>( path: string ):
                 setError( error )
             }
         )
+
+        return unsubscribe
     }, [ path ] )
 
     return [ value, loading, error ]
 }
 
+export type QueryType = [ string | FieldPath, WhereFilterOp, any ]
 export function useCollection<Type>(
     path: string,
-    fieldPath: string | FieldPath,
-    opStr: WhereFilterOp,
-    value: any
+    queries: QueryType[]
 ): [ Type[], boolean, firebase.firestore.FirestoreError ] {
     const [ collection, setCollection ] = React.useState( [] as Type[] )
 
@@ -51,24 +52,28 @@ export function useCollection<Type>(
 
     /* Effect so the listener is only set once */
     React.useEffect( () => {
-        firebase
-            .app()
-            .firestore()
-            .collection( path )
-            .where( fieldPath, opStr, value )
-            .onSnapshot(
-                /* TODO: Use docChanges() to use fewer reads */
-                snapshot => {
-                    const coll = snapshot.docs.map( doc => doc.data() )
-                    setLoading( false )
-                    setCollection( coll as Type[] )
-                },
-                error => {
-                    setLoading( false )
-                    setError( error )
-                }
-            )
-    }, [ path, fieldPath, opStr, value ] )
+        let coll = firebase.app().firestore().collection( path )
+        let queryRes: firebase.firestore.Query<firebase.firestore.DocumentData>
+
+        queries.forEach( query => {
+            queryRes = ( queryRes || coll ).where( ...query )
+        } )
+
+        const unsubscribe = queryRes.onSnapshot(
+            /* TODO: Use docChanges() to use fewer reads */
+            snapshot => {
+                const coll = snapshot.docs.map( doc => doc.data() )
+                setLoading( false )
+                setCollection( coll as Type[] )
+            },
+            error => {
+                setLoading( false )
+                setError( error )
+            }
+        )
+
+        return unsubscribe
+    }, [ path, JSON.stringify( queries ) ] )
 
     return [ collection, loading, error ]
 }

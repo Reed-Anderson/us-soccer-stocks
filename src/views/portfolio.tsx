@@ -7,7 +7,6 @@ import HeaderedCard from '../components/headered-card'
 import { useCollection } from '../misc/firebase-hooks'
 import { UserContext } from '../misc/user-provider'
 import { COLORS } from '../misc/colors'
-import { Currency } from 'grommet-icons'
 import { useHistory } from 'react-router'
 
 /*******************************************************************************
@@ -84,7 +83,16 @@ const OrdersPlacedList = () => {
     const [
         orders,
         ordersLoading
-    ] = useCollection<Order>( "orders", "userId", "==", authUser?.uid || "" )
+    ] = useCollection<Order>(
+        "orders",
+        [ [ "userId", "==", authUser?.uid || "" ] ]
+    )
+
+    const sortedOrders = React.useMemo( () => {
+        return orders.sort( ( a, b ) =>
+            b.creationDate.seconds - a.creationDate.seconds
+        )
+    }, [ orders ] )
 
     return (
         <HeaderedCard
@@ -93,13 +101,11 @@ const OrdersPlacedList = () => {
             message={!orders.length ? "No orders to display." : ""}
             title="Orders Placed"
         >
-            {orders.map( ( order, index ) => (
+            {sortedOrders.map( ( order, index ) => (
                 <OrderRow
                     key={order.uid}
                     oddIndex={!!( index % 2 )}
-                    playerName={order.playerId}
-                    status={order.status}
-                    value={order.value}
+                    order={order}
                 />
             ) )}
         </HeaderedCard>
@@ -117,9 +123,7 @@ const OrdersPlacedList = () => {
  */
 interface OrderRowProps {
     oddIndex: boolean
-    playerName: string
-    status: OrderStatus
-    value: number
+    order: Order
 }
 
 /**
@@ -127,6 +131,8 @@ interface OrderRowProps {
  */
 const OrderRow = ( props: OrderRowProps ) => {
     const history = useHistory()
+    const playerName = props.order.playerId
+    const date = props.order.creationDate.toDate()
 
     return (
         <Box
@@ -134,21 +140,23 @@ const OrderRow = ( props: OrderRowProps ) => {
             background={props.oddIndex ? COLORS['light-2'] : COLORS.white}
             direction="row"
             flex={false}
-            pad={{ horizontal: "xsmall", vertical: "2px" }}
+            pad={{ horizontal: "small", vertical: "2px" }}
         >
+            <Text size="xsmall">
+                {date.getMonth() + 1}/{date.getDate()}
+            </Text>
             <Button
                 color={COLORS['dark-1']}
                 hoverIndicator
-                label={props.playerName}
-                onClick={() => history.push( `/players/${props.playerName}` )}
+                label={playerName}
+                onClick={() => history.push( `/players/${playerName}` )}
                 plain
                 style={{ padding: 8 }}
             />
             <GrowDiv />
-            <OrderStatusLabel status={props.status} />
-            <Box direction="row" flex={false} justify="end" width="95px">
-                <Text>${props.value}</Text>
-                <Currency style={{ padding: '0 10px' }} />
+            <OrderStatusLabel status={props.order.status} />
+            <Box direction="row" flex={false} justify="end" width="50px">
+                <Text size="small">${props.order.value}</Text>
             </Box>
         </Box>
     )
@@ -174,11 +182,16 @@ const OrderStatusLabel = ( props: OrderStatusLabelProps ) => {
     return (
         <Box
             background={{ color: COLORS['neutral-3'], opacity: .25 }}
-            margin="xsmall"
             pad="xsmall"
-            style={{ borderRadius: 5, display: "inline-block" }}
+            style={{
+                borderRadius: 5,
+                display: "inline-block",
+                padding: "2px 6px"
+            }}
         >
-            {props.status}
+            <Text size="xsmall">
+                {props.status}
+            </Text>
         </Box>
     )
 }

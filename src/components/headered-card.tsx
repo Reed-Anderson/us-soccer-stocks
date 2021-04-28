@@ -26,7 +26,11 @@ interface HeaderedCardProps {
  */
 const HeaderedCard: React.FC<HeaderedCardProps> = props => {
     return (
-        <Card border={{ color: COLORS["light-5"] }} {...props.addlCardProps}>
+        <Card
+            border={{ color: COLORS["light-5"] }}
+            height="100%"
+            {...props.addlCardProps}
+        >
             <CardHeader
                 background={COLORS["light-2"]}
                 border={{ color: COLORS["light-5"], side: "bottom" }}
@@ -38,7 +42,7 @@ const HeaderedCard: React.FC<HeaderedCardProps> = props => {
                 <GrowDiv />
                 {props.rightHeaderElement}
             </CardHeader>
-            <CardBody>
+            <CardBody overflow="auto">
                 {props.loading && (
                     <Box align="center" fill justify="center">
                         <HashLoader color={COLORS['neutral-3']} />

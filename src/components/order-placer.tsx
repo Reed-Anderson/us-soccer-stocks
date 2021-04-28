@@ -13,7 +13,6 @@ import {
 import { Checkmark, Currency, Optimize, PieChart, User } from "grommet-icons"
 import * as React from "react"
 import {
-    NEW_USER_CASH_AMOUNT,
     Order,
     OrderStatus,
     PostTransactionLog,
@@ -26,6 +25,7 @@ import { UserContext } from "../misc/user-provider"
 import Modal from "./modal"
 import { MoonLoader } from "react-spinners"
 import { useHistory } from "react-router"
+import useCashOnHand from "../misc/use-cash-on-hand"
 
 /*******************************************************************************
  *
@@ -99,7 +99,7 @@ const BuySection = ( props: BuySectionProps ) => {
     const [ amount, setAmount ] = React.useState( 0 )
     const size = React.useContext( ResponsiveContext )
     const authUser = React.useContext( UserContext )
-    const cashOnHand = NEW_USER_CASH_AMOUNT
+    const cashOnHand = useCashOnHand()
 
     /**
      * Truncate number to two decimal places
@@ -121,7 +121,7 @@ const BuySection = ( props: BuySectionProps ) => {
             .id
 
         const nextOrder: Order = {
-            creationDate: new Date(),
+            creationDate: firebase.firestore.Timestamp.now(),
             playerId: props.ptlPlayer.displayName,
             status: OrderStatus.Placed,
             uid: nextId,
