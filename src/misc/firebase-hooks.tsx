@@ -55,6 +55,19 @@ export function useCollection<Type>(
         let coll = firebase.app().firestore().collection( path )
         let queryRes: firebase.firestore.Query<firebase.firestore.DocumentData>
 
+        const emptyVal = queries.some( q => {
+            if( !q[ 2 ] ) {
+                return true
+            }
+            else if( Array.isArray( q[ 2 ] ) && !q[ 2 ].length ) {
+                return true
+            }
+        } )
+
+        if( emptyVal ) {
+            return
+        }
+
         queries.forEach( query => {
             queryRes = ( queryRes || coll ).where( ...query )
         } )

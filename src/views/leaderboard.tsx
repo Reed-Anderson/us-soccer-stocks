@@ -9,8 +9,13 @@ import {
 } from 'grommet'
 import MainHeader from '../components/main-header'
 import { GrowDiv, SubHeader } from '../components/simple-divs'
-import { PostTransactionLog, PtlUser } from '../../functions/src/data/types'
-import { useDocumentData } from '../misc/firebase-hooks'
+import {
+    NEW_USER_CASH_AMOUNT,
+    PostTransactionLog,
+    PtlUser,
+    User
+} from '../../functions/src/data/types'
+import { useCollection, useDocumentData } from '../misc/firebase-hooks'
 import FullPageLoader from '../components/full-page-loader'
 import { COLORS } from '../misc/colors'
 import { Currency, Search, UserManager } from 'grommet-icons'
@@ -31,12 +36,23 @@ const LeaderboardView = () => {
     ] = useDocumentData<PostTransactionLog>( "postTransactionLogs/1" )
     const [ userQuery, setUserQuery ] = React.useState( "" )
     const smallSize = React.useContext( ResponsiveContext ) === "small"
-    const filteredUsers = React.useMemo( () => ( ptl?.users
-        .filter( u =>
-            u.displayName.toLowerCase().includes( userQuery.toLowerCase() )
-        )
-        .sort( ( a, b ) => a.netWorth - b.netWorth )
-    ), [ ptl, userQuery ] )
+    const [ newUsers ] = useCollection<User>(
+        "users",
+        [
+            [ "uid", "not-in", ptl?.users.map( u => u.uid ) ]
+        ]
+    )
+
+    const filteredUsers: ( User | PtlUser )[] = React.useMemo( () => {
+        return []
+            .concat( ptl?.users )
+            .concat( newUsers )
+            .filter( u =>
+                u && u.displayName
+                    .toLowerCase()
+                    .includes( userQuery.toLowerCase() )
+            )
+    }, [ ptl, userQuery, newUsers ] )
 
     return (
         <>
@@ -71,7 +87,7 @@ const LeaderboardView = () => {
                                 <LeaderboardUserRow
                                     key={`ptl_user_${ptlUser.uid}`}
                                     index={index}
-                                    ptlUser={ptlUser}
+                                    user={ptlUser}
                                 />
                             ) )}
                         </Box>
@@ -93,7 +109,7 @@ const LeaderboardView = () => {
  */
 interface LeaderboardUserRowProps {
     index: number
-    ptlUser: PtlUser
+    user: User | PtlUser
 }
 
 /**
@@ -101,6 +117,8 @@ interface LeaderboardUserRowProps {
  */
 const LeaderboardUserRow = ( props: LeaderboardUserRowProps ) => {
     const history = useHistory()
+    const netWorth = "netWorth" in props.user ?
+        props.user.netWorth : NEW_USER_CASH_AMOUNT
 
     return (
         <Box
@@ -114,13 +132,13 @@ const LeaderboardUserRow = ( props: LeaderboardUserRowProps ) => {
                 color={COLORS['dark-1']}
                 hoverIndicator
                 icon={<UserManager />}
-                label={`${props.index + 1}. ${props.ptlUser.displayName}`}
-                onClick={() => history.push( `/profile/${props.ptlUser.uid}` )}
+                label={`${props.index + 1}. ${props.user.displayName}`}
+                onClick={() => history.push( `/profile/${props.user.uid}` )}
                 plain
                 style={{ padding: 8 }}
             />
             <GrowDiv />
-            <Text>${props.ptlUser.netWorth}</Text>
+            <Text>${netWorth}</Text>
             <Currency style={{ padding: '0 10px' }} />
         </Box>
     )
