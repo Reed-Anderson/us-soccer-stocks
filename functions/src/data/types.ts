@@ -121,6 +121,7 @@ export interface Order {
     creationDate: firebase.firestore.Timestamp
     playerId: string
     status: OrderStatus
+    type: "Buy" | "Sell"
     uid: string
     userId: string
     value: number

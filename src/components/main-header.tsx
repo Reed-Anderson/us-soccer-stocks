@@ -29,6 +29,7 @@ import { useHistory } from "react-router-dom"
 import firebase from 'firebase/app'
 import { PostTransactionLog } from "../../functions/src/data/types"
 import { useDocumentData } from "../misc/firebase-hooks"
+import styled from "styled-components"
 
 /*******************************************************************************
  *
@@ -147,6 +148,12 @@ const MainHeader = () => {
  *
  ******************************************************************************/
 
+const StyledWhitePlaceholders = styled.div`
+    *::placeholder {
+        color: ${COLORS.white}99;
+    }
+`
+
 /**
  * GlobalSearchBar Component
  */
@@ -187,15 +194,18 @@ const GlobalSearchBar = () => {
 
     return (
         <Box margin={{ horizontal: "medium" }} width="small">
-            <TextInput
-                color={COLORS.white}
-                icon={<Search />}
-                onChange={onChange}
-                onFocus={() => setSuggestOpen( !!searchString )}
-                ref={targetRef}
-                size="small"
-                value={searchString}
-            />
+            <StyledWhitePlaceholders>
+                <TextInput
+                    color={COLORS.white}
+                    icon={<Search />}
+                    onChange={onChange}
+                    onFocus={() => setSuggestOpen( !!searchString )}
+                    placeholder="Search..."
+                    ref={targetRef}
+                    size="small"
+                    value={searchString}
+                />
+            </StyledWhitePlaceholders>
             {suggestOpen && (
                 <Drop
                     align={{ top: 'bottom', right: 'right' }}

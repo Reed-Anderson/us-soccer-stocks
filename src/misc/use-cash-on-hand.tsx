@@ -8,10 +8,10 @@ import { UserContext } from "./user-provider"
  * Custom hook to track a user's cash on hand
  *
  ******************************************************************************/
-const useCashOnHand = () => {
+const useCashOnHand = (): [ number, boolean ] => {
     const [ cashOnHand, setCashOnHand ] = React.useState( 0 )
     const { user } = React.useContext( UserContext )
-    const [ ordersPlaced ] = useCollection<Order>(
+    const [ ordersPlaced, ordersPlacedLoading ] = useCollection<Order>(
         "orders",
         [
             [ "userId", "==", user?.uid || "" ],
@@ -19,20 +19,18 @@ const useCashOnHand = () => {
         ]
     )
 
+    const cashOnHandLoading = !user || ordersPlacedLoading
 
     React.useEffect( () => {
-        if( user && ordersPlaced.length ) {
+        if( !cashOnHandLoading ) {
             const placeCashed = ordersPlaced.reduce( ( sum, order ) => {
                 return sum + order.value
             }, 0 )
             setCashOnHand( user.cashOnHand - placeCashed )
         }
-        else {
-            setCashOnHand( 0 )
-        }
     }, [ user, ordersPlaced ] )
 
-    return cashOnHand
+    return [ cashOnHand, cashOnHandLoading ]
 }
 
 export default useCashOnHand

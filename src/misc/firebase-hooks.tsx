@@ -53,7 +53,7 @@ export function useCollection<Type>(
     /* Effect so the listener is only set once */
     React.useEffect( () => {
         let coll = firebase.app().firestore().collection( path )
-        let queryRes: firebase.firestore.Query<firebase.firestore.DocumentData>
+        let queryRes: firebase.firestore.Query = coll
 
         const emptyVal = queries.some( q => {
             if( !q[ 2 ] ) {

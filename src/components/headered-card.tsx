@@ -15,6 +15,7 @@ import { HashLoader } from "react-spinners"
  */
 interface HeaderedCardProps {
     addlCardProps?: BoxTypes
+    addlCardBodyProps?: BoxTypes
     loading?: boolean
     message?: string
     rightHeaderElement?: JSX.Element
@@ -42,20 +43,23 @@ const HeaderedCard: React.FC<HeaderedCardProps> = props => {
                 <GrowDiv />
                 {props.rightHeaderElement}
             </CardHeader>
-            <CardBody overflow="auto">
+            <CardBody overflow="auto" {...props.addlCardBodyProps}>
                 {props.loading && (
                     <Box align="center" fill justify="center">
                         <HashLoader color={COLORS['neutral-3']} />
                     </Box>
                 )}
-                {!props.loading && props.message && (
-                    <Box align="center" fill justify="center">
-                        <Text color={COLORS['status-warning']}>
-                            {props.message}
-                        </Text>
-                    </Box>
+                {!props.loading && (
+                    props.message ? (
+                        <Box align="center" fill justify="center">
+                            <Text color={COLORS['status-warning']}>
+                                {props.message}
+                            </Text>
+                        </Box>
+                    ) : (
+                        props.children
+                    )
                 )}
-                {props.children}
             </CardBody>
         </Card>
     )
