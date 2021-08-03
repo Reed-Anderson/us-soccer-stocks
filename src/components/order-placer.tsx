@@ -2,9 +2,6 @@ import {
     Box,
     BoxTypes,
     Button,
-    Card,
-    CardBody,
-    CardHeader,
     ResponsiveContext,
     Text,
     TextInput
@@ -25,6 +22,7 @@ import { truncateTwoDecimals } from "../misc/helpers"
 import BuyConfirmModal from "./buy-confirm-modal"
 import { UserContext } from "../misc/user-provider"
 import { useHistory } from "react-router-dom"
+import { GrowDiv } from "./simple-divs"
 
 /*******************************************************************************
  *
@@ -37,7 +35,7 @@ const smallTileProps = ( size: string ) => ( {
 } )
 
 const smallTileBodyProps: BoxTypes = {
-    height: { min: "xsmall" },
+    height: { min: "165px" },
     gap: "small",
     justify: "center",
     pad: "small"
@@ -120,8 +118,9 @@ const BuySection = ( props: BuySectionProps ) => {
     ] = useCollection<Order>(
         "orders",
         [
-            [ "userId", "==", user?.uid || "" ],
-            [ "status", "==", OrderStatus.Placed ]
+            [ "playerId", "==", props.ptlPlayer.displayName ],
+            [ "status", "==", OrderStatus.Placed ],
+            [ "userId", "==", user?.uid || "" ]
         ]
     )
 
@@ -180,6 +179,7 @@ const BuySection = ( props: BuySectionProps ) => {
                     />
                 </Box>
             </Box>
+            <GrowDiv />
             <Button
                 disabled={amount <= 0 || amount > cashOnHand}
                 label="Buy"
@@ -210,43 +210,28 @@ const ExistingOrderBuySection = ( props: ExistingOrderBuySectionProps ) => {
     const size = React.useContext( ResponsiveContext )
 
     return (
-        <Card
-            border={{ color: COLORS["light-6"] }}
-            width={size === "small" ? "100%" : "48%"}
+        <HeaderedCard
+            addlCardProps={smallTileProps( size )}
+            addlCardBodyProps={smallTileBodyProps}
+            title="Buy"
         >
-            <CardHeader
-                background={COLORS["light-2"]}
-                border={{ color: COLORS["light-5"], side: "bottom" }}
-                justify="start"
-                pad="small"
-                style={{ textTransform: "capitalize" }}
-            >
-                <Text weight="bold">Buy</Text>
-            </CardHeader>
-            <CardBody
-                height={{ min: "xsmall" }}
-                gap="small"
-                justify="center"
-                pad="small"
-            >
-                <Box height="100%" justify="center">
-                    <Text
-                        color={COLORS["dark-2"]}
-                        textAlign="center"
-                        size="small"
-                    >
-                        You already have an unprocessed order for&nbsp;
-                        {props.ptlPlayer.displayName} stock. The existing order
-                        can be cancelled, but you may not create another one.
-                    </Text>
-                </Box>
-                <Button
-                    icon={<PieChart />}
-                    label="Portfolio"
-                    onClick={() => history.push( "/portfolio" )}
-                />
-            </CardBody>
-        </Card>
+            <Box height="100%" justify="center">
+                <Text
+                    color={COLORS["dark-2"]}
+                    textAlign="center"
+                    size="small"
+                >
+                    You already have an unprocessed order for&nbsp;
+                    {props.ptlPlayer.displayName} stock. The existing order
+                    can be cancelled, but you may not create another one.
+                </Text>
+            </Box>
+            <Button
+                icon={<PieChart />}
+                label="Portfolio"
+                onClick={() => history.push( "/portfolio" )}
+            />
+        </HeaderedCard>
     )
 }
 
