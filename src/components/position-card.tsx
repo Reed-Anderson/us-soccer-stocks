@@ -97,11 +97,13 @@ const PositionCard = ( props: PositionCardProps ) => {
                 )}
             </CardBody>
             <CardFooter
+                background={`${COLORS["light-1"]}99`}
                 border={{ color: COLORS["light-4"], side: "top" }}
                 pad={{ horizontal: "small", vertical: "xsmall" }}
             >
                 <Text size="small">
-                    Points earned increase 50% for competitive games.
+                    Points earned increase 50% for competitive games and 100%
+                    for World Cup games.
                 </Text>
             </CardFooter>
         </Card>
