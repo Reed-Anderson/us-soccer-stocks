@@ -131,7 +131,6 @@ const ProfileForm = ( props: ProfileFormProps ) => {
             return
         }
 
-        /*  */
         props.authUser.updateProfile( {
             displayName: dispName
         } )

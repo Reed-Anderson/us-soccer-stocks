@@ -12,10 +12,14 @@ import { Checkmark, Optimize, PieChart, Currency, User } from "grommet-icons"
 import * as React from "react"
 import { useHistory } from "react-router-dom"
 import { MoonLoader } from "react-spinners"
-import { PtlPlayer, Order, OrderStatus } from "../../functions/src/data/types"
-import { COLORS } from "../misc/colors"
-import { UserContext } from "../misc/user-provider"
-import Modal from "./modal"
+import {
+    PtlPlayer,
+    Order,
+    OrderStatus
+} from "../../../functions/src/data/types"
+import { COLORS } from "../../misc/colors"
+import { UserContext } from "../../misc/user-provider"
+import Modal from "../modal"
 
 /*******************************************************************************
  *

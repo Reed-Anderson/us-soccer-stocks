@@ -1,4 +1,5 @@
 import firebase from "firebase"
+import { COLORS } from '../../../src/misc/colors'
 
 /*******************************************************************************
  *
@@ -125,4 +126,15 @@ export interface Order {
     uid: string
     userId: string
     value: number
+}
+
+export const getOrderStatusColor = ( status: OrderStatus ) => {
+    switch( status ) {
+        case OrderStatus.Placed:
+            return COLORS[ "neutral-3" ]
+        case OrderStatus.Fulfilled:
+            return COLORS[ "status-ok" ]
+        case OrderStatus.Cancelled:
+            return COLORS[ "status-critical" ]
+    }
 }
