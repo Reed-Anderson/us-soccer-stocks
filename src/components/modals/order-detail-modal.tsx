@@ -7,9 +7,9 @@ import { COLORS } from "../../misc/colors"
 import { GrowDiv } from "../simple-divs"
 import { MoonLoader } from "react-spinners"
 import firebase from 'firebase/app'
-import { OrderStatusLabel } from "../../views/portfolio"
 import { timestampToDate } from "../../misc/helpers"
 import { useHistory } from "react-router"
+import OrderStatusLabel from "../order-status-label"
 
 /*******************************************************************************
  *

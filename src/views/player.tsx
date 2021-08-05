@@ -51,8 +51,11 @@ const PlayerView = () => {
                 <Heading>{params.playerId}</Heading>
                 <Grid
                     {...getGridProps( size )}
+                    fill
                     gap="small"
+                    justifyContent="center"
                     margin={{ bottom: "medium" }}
+                    style={{ height: "auto" }}
                 >
                     <Box gridArea="buy">
                         <BuyCard ptlPlayer={ptlPlayer} />

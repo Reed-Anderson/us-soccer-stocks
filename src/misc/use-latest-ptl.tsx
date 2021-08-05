@@ -28,7 +28,6 @@ const useLatestPtl = ()
 
         coll.onSnapshot(
             snapshot => {
-                console.log( snapshot.docs )
                 setPtl( snapshot.docs[ 0 ].data() as PostTransactionLog )
                 setLoading( false )
             },
