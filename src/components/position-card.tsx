@@ -1,13 +1,4 @@
-import {
-    Box,
-    Button,
-    Card,
-    CardBody,
-    CardFooter,
-    CardHeader,
-    ResponsiveContext,
-    Text
-} from "grommet"
+import { Box, Button, ResponsiveContext } from "grommet"
 import { Optimize } from "grommet-icons"
 import * as React from "react"
 import { useHistory } from "react-router-dom"
@@ -15,7 +6,7 @@ import { SyncLoader } from "react-spinners"
 import { dividendToText, Position } from "../../functions/src/data/types"
 import { COLORS } from "../misc/colors"
 import { useDocumentData } from "../misc/firebase-hooks"
-import { GrowDiv } from "./simple-divs"
+import HeaderedCard from "./headered-card"
 
 /*******************************************************************************
  *
@@ -35,78 +26,73 @@ interface PositionCardProps {
  */
 const PositionCard = ( props: PositionCardProps ) => {
     const [
-        position,
-        positionLoading
+        position
     ] = useDocumentData<Position>( `positions/${props.positionName}` )
-    const history = useHistory()
 
-    if( positionLoading ) {
+    if( !position ) {
         return (
-            <Card
-                align="center"
-                border
-                height="small"
-                justify="center"
-                width="large"
+            <HeaderedCard
+                addlCardBodyProps={{ align: "center", justify: "center" }}
+                secondaryTitle={props.positionName}
+                title="Position:"
             >
                 <SyncLoader color={COLORS["accent-4"]} margin={5} size={20} />
-            </Card>
+            </HeaderedCard>
         )
     }
 
+    const footerText = `Dividends earned increase 50% for competitive games and
+        100% for World Cup games.`
+
     return (
-        <Card
-            border={{ color: COLORS["light-6"] }}
-            flex={false}
-            margin={{ bottom: "medium" }}
-            width="large"
+        <HeaderedCard
+            addlCardBodyProps={{
+                direction: "row",
+                flex: true,
+                pad: "small",
+                wrap: true
+            }}
+            footerText={footerText}
+            rightHeaderElement={<PlayersButton />}
+            secondaryTitle={props.positionName}
+            title="Position:"
         >
-            <CardHeader
-                border={{ color: COLORS["light-5"], side: "bottom" }}
-                background={COLORS["light-2"]}
-                justify="start"
-                gap="none"
-                pad={{ horizontal: "small", vertical: "xsmall" }}
-                style={{ textTransform: "capitalize" }}
-            >
-                <Text weight="bold">Position:</Text>
-                <Text margin="xsmall">{props.positionName}</Text>
-                <GrowDiv />
-                <Button
-                    color={COLORS["dark-2"]}
-                    icon={<Optimize />}
-                    hoverIndicator={COLORS["light-4"]}
-                    label="Players"
-                    onClick={() => history.push( "/players" )}
-                    plain
-                    style={{ padding: 5, textTransform: "capitalize" }}
-                />
-            </CardHeader>
-            <CardBody direction="row" flex pad="small" wrap>
-                {position && (
-                    Object.keys( position ).map(
-                        ( key: keyof Position, index ) => (
-                            <DividendTag
-                                key={key}
-                                dividendName={key}
-                                dividendValue={position[ key ]}
-                                index={index}
-                            />
-                        )
-                    )
-                )}
-            </CardBody>
-            <CardFooter
-                background={`${COLORS["light-1"]}99`}
-                border={{ color: COLORS["light-4"], side: "top" }}
-                pad={{ horizontal: "small", vertical: "xsmall" }}
-            >
-                <Text size="small">
-                    Points earned increase 50% for competitive games and 100%
-                    for World Cup games.
-                </Text>
-            </CardFooter>
-        </Card>
+            {Object.keys( position ).map(
+                ( key: keyof Position, index ) => (
+                    <DividendTag
+                        key={key}
+                        dividendName={key}
+                        dividendValue={position[ key ]}
+                        index={index}
+                    />
+                )
+            )}
+        </HeaderedCard>
+    )
+}
+
+/*******************************************************************************
+ *
+ * PlayersButton
+ *
+ ******************************************************************************/
+
+/**
+ * PlayersButton Component
+ */
+const PlayersButton = () => {
+    const history = useHistory()
+
+    return (
+        <Button
+            color={COLORS["dark-2"]}
+            icon={<Optimize />}
+            hoverIndicator={COLORS["light-4"]}
+            label="Players"
+            onClick={() => history.push( "/players" )}
+            plain
+            style={{ padding: 5, textTransform: "capitalize" }}
+        />
     )
 }
 

@@ -2,6 +2,7 @@ import { app } from "firebase-admin"
 import * as functions from "firebase-functions"
 import { PtlPlayer, PostTransactionLog } from "./data/types"
 import { getCollection } from "./utils"
+import firebase from 'firebase/app'
 
 /**
  * Creates the first PostTransactionLog from all players in the database
@@ -23,6 +24,7 @@ export const initPostTransactionLog = functions.https.onRequest(
         /* Set the first postTransactionLog */
         const docRef = app().firestore().doc( "/postTransactionLogs/1" )
         const postTransactionLog: PostTransactionLog = {
+            creationDate: firebase.firestore.Timestamp.now(),
             players: postTransLogPlayers,
             users: []
         }

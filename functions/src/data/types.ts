@@ -29,6 +29,7 @@ export interface User {
  ******************************************************************************/
 
 export interface PostTransactionLog {
+    creationDate: firebase.firestore.Timestamp
     players: PtlPlayer[]
     users: PtlUser[]
 }
