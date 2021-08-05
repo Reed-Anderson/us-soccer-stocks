@@ -7,6 +7,7 @@ import MainHeader from '../components/main-header'
 import PositionCard from '../components/position-card'
 import SellCard from '../components/sell-card'
 import { SubHeader } from '../components/simple-divs'
+import ValueGraph from '../components/value-graph'
 import useLatestPtl from '../misc/use-latest-ptl'
 
 /*******************************************************************************
@@ -63,6 +64,9 @@ const PlayerView = () => {
                     <Box gridArea="sell">
                         <SellCard ptlPlayer={ptlPlayer} />
                     </Box>
+                    <Box gridArea="graph">
+                        <ValueGraph playerId={ptlPlayer.displayName} />
+                    </Box>
                     <Box gridArea="order">
                         <PositionCard positionName={ptlPlayer.position} />
                     </Box>
@@ -84,19 +88,21 @@ const getGridProps = ( size: string ): GridProps => {
             areas: [
                 [ "buy" ],
                 [ "sell" ],
+                [ "graph" ],
                 [ "order" ]
             ],
-            rows: [ "225px", "200px", "275px" ]
+            rows: [ "225px", "200px", "500px", "275px" ]
         }
     }
     else {
         return {
             areas: [
                 [ "buy", "sell" ],
+                [ "graph", "graph" ],
                 [ "order", "order" ]
             ],
             columns: [ "medium", "medium" ],
-            rows: [ "225px", "200px" ]
+            rows: [ "225px", "500px", "200px" ]
         }
     }
 }
