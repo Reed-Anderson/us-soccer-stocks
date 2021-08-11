@@ -1,8 +1,7 @@
 import * as React from "react"
 import { Box, Button, Text, TextInput } from "grommet"
 import { Currency, PieChart } from "grommet-icons"
-import { Order, OrderStatus, PtlPlayer } from "../../functions/src/data/types"
-import { useCollection } from "../misc/firebase-hooks"
+import { PtlPlayer } from "../../functions/src/data/types"
 import useCashOnHand from "../misc/use-cash-on-hand"
 import HeaderedCard from "./headered-card"
 import { truncateTwoDecimals } from "../misc/helpers"
@@ -10,6 +9,7 @@ import BuyConfirmModal from "./modals/buy-confirm-modal"
 import { UserContext } from "../misc/user-provider"
 import { useHistory } from "react-router-dom"
 import { COLORS } from "../misc/colors"
+import useExistingPlacedOrders from "../misc/use-existing-placed-orders"
 
 /*******************************************************************************
  *
@@ -32,16 +32,9 @@ const BuyCard = ( props: BuyCardProps ) => {
     const [ confirmerOpen, setConfirmerOpen ] = React.useState( false )
     const [ amount, setAmount ] = React.useState( 0 )
     const [ cashOnHand, cashOnHandLoading ] = useCashOnHand()
-    const [
-        existingOrders,
-        existingOrdersLoading
-    ] = useCollection<Order>(
-        "orders",
-        [
-            [ "playerId", "==", props.ptlPlayer.displayName ],
-            [ "status", "==", OrderStatus.Placed ],
-            [ "userId", "==", user?.uid || "" ]
-        ]
+    const [ existingOrders, existingOrdersLoading ] = useExistingPlacedOrders(
+        props.ptlPlayer.displayName,
+        user?.uid
     )
 
     /**

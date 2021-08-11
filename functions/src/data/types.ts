@@ -86,6 +86,7 @@ export interface Position {
     dividendPerGoalConcede?: number
     dividendPerMinute?: number
     dividendPerTeamGoal?: number
+    investmentBeforeInitialization: number
 }
 
 export const dividendToText = ( dividend: keyof Position ) => {

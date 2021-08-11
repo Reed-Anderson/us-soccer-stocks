@@ -16,7 +16,7 @@ import {
 } from 'grommet'
 import { COLORS } from '../misc/colors'
 import { useHistory } from 'react-router-dom'
-import { Currency, PieChart, Search, User } from 'grommet-icons'
+import { Currency, InProgress, PieChart, Search, User } from 'grommet-icons'
 import {
     PostTransactionLog,
     PtlPlayer,
@@ -25,6 +25,8 @@ import {
 import { useDocumentData } from '../misc/firebase-hooks'
 import FullPageLoader from '../components/full-page-loader'
 import useStillMounted from '../misc/use-still-mounted'
+import useExistingPlacedOrders from '../misc/use-existing-placed-orders'
+import { UserContext } from '../misc/user-provider'
 
 /*******************************************************************************
  *
@@ -119,6 +121,22 @@ const PlayersView = () => {
                                 value={playerQuery}
                             />
                         </Box>
+                        <Box
+                            background={COLORS['status-warning'] + "33"}
+                            border={{ color: COLORS['status-warning'] + "AA" }}
+                            flex={false}
+                            margin={{ bottom: "small" }}
+                            pad="small"
+                            round="xsmall"
+                            width="large"
+                        >
+                            <Text color={COLORS['dark-2']} size="small">
+                                Players in this position still need more
+                                investment from users before they can be
+                                assigned values. $1000 of investment is still
+                                needed for players in this position.
+                            </Text>
+                        </Box>
                         <PlayerBox players={filteredPlayers} />
                     </>
                 )}
@@ -192,6 +210,11 @@ const PlayerRow = ( props: PlayerRowProps ) => {
     const history = useHistory()
     const size = React.useContext( ResponsiveContext )
     const playerName = props.player.displayName
+    const { user } = React.useContext( UserContext )
+    const [ existingPlacedOrders ] = useExistingPlacedOrders(
+        props.player.displayName,
+        user?.uid
+    )
 
     return (
         <Box
@@ -231,6 +254,9 @@ const PlayerRow = ( props: PlayerRowProps ) => {
                 )
             )}
             <GrowDiv />
+            {existingPlacedOrders?.length > 0 && (
+                <InProgress style={{ padding: '0 5px' }} />
+            )}
             <Text>${props.player.value}</Text>
             <Currency style={{ padding: '0 10px' }} />
         </Box>
