@@ -233,7 +233,10 @@ const PlayerRow = ( props: PlayerRowProps ) => {
                 plain
                 style={{ padding: 8 }}
             />
-            {props.owned && (
+            {existingPlacedOrders?.length > 0 && (
+                <InProgress style={{ padding: '0 5px' }} />
+            )}
+            {( props.owned || true ) && (
                 size === "small" ? (
                     <PieChart
                         color={COLORS['status-ok']}
@@ -254,9 +257,6 @@ const PlayerRow = ( props: PlayerRowProps ) => {
                 )
             )}
             <GrowDiv />
-            {existingPlacedOrders?.length > 0 && (
-                <InProgress style={{ padding: '0 5px' }} />
-            )}
             <Text>${props.player.value}</Text>
             <Currency style={{ padding: '0 10px' }} />
         </Box>
