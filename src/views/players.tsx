@@ -222,16 +222,15 @@ const PlayerRow = ( props: PlayerRowProps ) => {
         user?.uid
     )
 
-    const StatusIcon = ( () => {
-        if( existingPlacedOrders?.length ) {
-            return (
-                <InProgress style={{ margin: "0 10px" }} />
-            )
+    const status = ( () => {
+        if( existingPlacedOrders.length ) {
+            return "ordered"
         }
         else if( props.owned ) {
-            return (
-                <StatusGood style={{ margin: "0 10px" }} />
-            )
+            return "owned"
+        }
+        else {
+            return "none"
         }
     } )()
 
@@ -253,7 +252,7 @@ const PlayerRow = ( props: PlayerRowProps ) => {
                 style={{ padding: 8 }}
             />
             <GrowDiv />
-            {StatusIcon}
+            <StatusIcon status={status} />
             <Text margin={{ left: "0px" }}>${props.player.value}</Text>
             <Currency style={{ padding: '0 10px' }} />
             {Math.random() > .5 ? (
@@ -263,6 +262,33 @@ const PlayerRow = ( props: PlayerRowProps ) => {
             )}
         </Box>
     )
+}
+
+/*******************************************************************************
+ *
+ * StatusIcon
+ *
+ ******************************************************************************/
+
+/**
+ * Props for StatusIcon
+ */
+interface StatusIconProps {
+    status: "owned" | "ordered" | "none"
+}
+
+/**
+ * StatusIcon Component
+ */
+const StatusIcon = ( props: StatusIconProps ) => {
+    switch( props.status ) {
+        case "owned":
+            return <StatusGood style={{ margin: "0 10px" }} />
+        case "ordered":
+            return <InProgress style={{ margin: "0 10px" }} />
+        case "none":
+            return null
+    }
 }
 
 export default PlayersView
