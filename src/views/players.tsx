@@ -11,12 +11,19 @@ import {
     Tab,
     Tabs,
     Text,
-    TextInput,
-    Tip
+    TextInput
 } from 'grommet'
 import { COLORS } from '../misc/colors'
 import { useHistory } from 'react-router-dom'
-import { Currency, InProgress, PieChart, Search, User } from 'grommet-icons'
+import {
+    Ascending,
+    Currency,
+    Descending,
+    InProgress,
+    Search,
+    StatusGood,
+    User
+} from 'grommet-icons'
 import {
     PostTransactionLog,
     PtlPlayer,
@@ -133,8 +140,8 @@ const PlayersView = () => {
                             <Text color={COLORS['dark-2']} size="small">
                                 Players in this position still need more
                                 investment from users before they can be
-                                assigned values. $1000 of investment is still
-                                needed for players in this position.
+                                assigned values. <b>$1000</b> of investment is
+                                still needed for players in this position.
                             </Text>
                         </Box>
                         <PlayerBox players={filteredPlayers} />
@@ -208,13 +215,25 @@ interface PlayerRowProps {
  */
 const PlayerRow = ( props: PlayerRowProps ) => {
     const history = useHistory()
-    const size = React.useContext( ResponsiveContext )
     const playerName = props.player.displayName
     const { user } = React.useContext( UserContext )
     const [ existingPlacedOrders ] = useExistingPlacedOrders(
         props.player.displayName,
         user?.uid
     )
+
+    const StatusIcon = ( () => {
+        if( existingPlacedOrders?.length ) {
+            return (
+                <InProgress style={{ margin: "0 10px" }} />
+            )
+        }
+        else if( props.owned ) {
+            return (
+                <StatusGood style={{ margin: "0 10px" }} />
+            )
+        }
+    } )()
 
     return (
         <Box
@@ -233,32 +252,15 @@ const PlayerRow = ( props: PlayerRowProps ) => {
                 plain
                 style={{ padding: 8 }}
             />
-            {existingPlacedOrders?.length > 0 && (
-                <InProgress style={{ padding: '0 5px' }} />
-            )}
-            {( props.owned || true ) && (
-                size === "small" ? (
-                    <PieChart
-                        color={COLORS['status-ok']}
-                        style={{ marginLeft: 5 }}
-                    />
-                ) : (
-                    <Tip
-                        content="This player is part of your portfolio."
-                        dropProps={{ align: { left: "right" } }}
-                    >
-                        <Box>
-                            <PieChart
-                                color={COLORS['status-ok']}
-                                style={{ marginLeft: 5 }}
-                            />
-                        </Box>
-                    </Tip>
-                )
-            )}
             <GrowDiv />
-            <Text>${props.player.value}</Text>
+            {StatusIcon}
+            <Text margin={{ left: "0px" }}>${props.player.value}</Text>
             <Currency style={{ padding: '0 10px' }} />
+            {Math.random() > .5 ? (
+                <Ascending color={COLORS['status-ok']} />
+            ) : (
+                <Descending color={COLORS['status-critical']} />
+            )}
         </Box>
     )
 }
